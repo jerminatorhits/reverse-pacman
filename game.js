@@ -55,6 +55,10 @@ const walls = [
   [ 96, 104, 20, 18 ]
 ];
 
+const dots = [
+  [ 25, 34 ]
+];
+
 const pacmans = [
   { x: 22, y: 114, vx: 1, vy: 0 },
   { x: 256 - 22, y: 114, vx: -1, vy: 0 }
@@ -79,6 +83,14 @@ function draw(context) {
   context.strokeStyle = "#00F";
   walls.forEach(wall => {
     context.strokeRect(wall[0], wall[1], wall[2], wall[3]);
+  });
+
+  // Draw the dots
+  context.fillStyle = "#FFF";
+  dots.forEach(dot => {
+    context.beginPath();
+    context.arc(dot[0], dot[1], 1, 0, Math.PI * 2);
+    context.fill();
   });
 
   // Draw the pacmen
