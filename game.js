@@ -129,7 +129,7 @@ function draw(context) {
   // Draw the pacmen
   const mouthRadius = ((Math.sin(Date.now() / 100) + 1) / 2) * 4; // chomp chomp
   [ ...pacmans, menuPacman ].forEach(pacman => {
-    context.fillStyle = "#FF0";    
+    context.fillStyle = pacman.power ? "#F80" : "#FF0";
     context.beginPath();
     context.arc(pacman.x, pacman.y, 6, 0, Math.PI * 2);
     context.lineTo(pacman.x, pacman.y);
@@ -248,6 +248,13 @@ function think() {
   });
 }
 
+function spawn() {
+  if (counter % 600 === 0) {
+    pacmans.push({ x: 0, y: 114, vx: -1, vy: 0, power: 600 });
+    pacmans.push({ x: 0, y: 114, vx: 1, vy: 0, power: 600 });
+  }
+}
+
 function portals() {
   [ ...pacmans, ghost ].forEach(entity => {
     if (entity.x < 0) {
@@ -283,7 +290,10 @@ function consume() {
 
 draw(context);
 
+let counter = 0;
 function run() {
+  counter += 1;
+  spawn();
   think();
   consume();
   collisions();
