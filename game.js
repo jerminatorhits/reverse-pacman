@@ -230,6 +230,14 @@ function portals() {
 function consume() {
   const chompBoxes = pacmans.map(convertSpriteToBox);
   dots = dots.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
+
+  // eats pacmen on ghost collision
+  chompBoxes.forEach((chompBox, index) => {
+    const ghostBox = convertSpriteToBox(ghost);
+    if (collides(chompBox, ghostBox)) {
+      pacmans.splice(index, 1);
+    }
+  });
 }
 
 draw(context);
