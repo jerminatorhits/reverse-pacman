@@ -82,6 +82,7 @@ function draw(context) {
   });
 
   // Draw the pacmen
+  const mouthRadius = ((Math.sin(Date.now() / 100) + 1) / 2) * 4; // chomp chomp
   pacmans.forEach(pacman => {
     context.fillStyle = "#FF0";    
     context.beginPath();
@@ -90,7 +91,7 @@ function draw(context) {
     context.fill();
     context.fillStyle = "#000";
     context.beginPath();
-    context.arc(pacman.x, pacman.y, 4, 0, Math.PI);
+    context.arc(pacman.x, pacman.y, mouthRadius, 0, Math.PI);
     context.lineTo(pacman.x, pacman.y);
     context.fill();
     context.fillStyle = "#FFF";
