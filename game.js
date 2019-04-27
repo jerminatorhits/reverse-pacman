@@ -60,44 +60,50 @@ walls.slice().forEach(wall => {
   walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
 });
 
-let dots = [];
-const noDotZones = [
-  [ 16, 80, 44, 64 ],
-  [ 196, 80, 44, 64 ],
-  [ 80, 80, 96, 64 ]
-];
-for (let x = 19; x < 230; x += 2) {
-  for (let y = 27; y < 220; y += 2) {
-    const box = [ x, y, 12, 12 ];
-    if (!noDotZones.some(zone => collides(box, zone))) {
-      if (!walls.some(otherBox => collides(box, otherBox))) {
-        if (!dots.some(dot => collides(box, [...dot, 1, 1]))) {
-          dots.push([ x + 6, y + 6 ]);
-        }
-      }
-    }
-  }
-}
+let dots, pellets, pacmans, ghost;
 
-let pellets = [];
-for (let i = 0; i < 4; i += 1) {
-  const dot = dots[Math.floor(Math.random() * dots.length)];
-  dots = dots.filter(d => d !== dot);
-  pellets.push(dot);
-}
-
-const pacmans = [
-  { x: 22, y: 114, vx: 1, vy: 0 },
-  { x: 256 - 22, y: 114, vx: -1, vy: 0 }
-];
-
-const ghost = { x: 128, y: 112, vx: 0, vy: 0 };
 let wallet = 0;
-
+let level = 1;
 
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 
+function initialize() {
+  counter = 0;
+
+  ghost = { x: 128, y: 112, vx: 0, vy: 0 };
+
+  dots = [];
+  const noDotZones = [
+    [ 16, 80, 44, 64 ],
+    [ 196, 80, 44, 64 ],
+    [ 80, 80, 96, 64 ]
+  ];
+  for (let x = 19; x < 230; x += 2) {
+    for (let y = 27; y < 220; y += 2) {
+      const box = [ x, y, 12, 12 ];
+      if (!noDotZones.some(zone => collides(box, zone))) {
+        if (!walls.some(otherBox => collides(box, otherBox))) {
+          if (!dots.some(dot => collides(box, [...dot, 1, 1]))) {
+            dots.push([ x + 6, y + 6 ]);
+          }
+        }
+      }
+    }
+  }
+
+  pellets = [];
+  for (let i = 0; i < 3 + level; i += 1) {
+    const dot = dots[Math.floor(Math.random() * dots.length)];
+    dots = dots.filter(d => d !== dot);
+    pellets.push(dot);
+  }
+
+  pacmans = [
+    { x: 22, y: 114, vx: 1, vy: 0 },
+    { x: 256 - 22, y: 114, vx: -1, vy: 0 }
+  ];
+}
 
 function draw(context) {
   // Clear the screen
@@ -125,7 +131,7 @@ function draw(context) {
 
   // Draw the bottom menu
   const menuPacman = { x: 16, y: 240, vx: 0, vy: 0, static: true };
-  context.fillText(wallet, 26, 244);
+  context.fillText(`${wallet} / ${level}`, 26, 244);
 
   // Draw the pacmen
   const mouthRadius = ((Math.sin(Date.now() / 100) + 1) / 2) * 4; // chomp chomp
@@ -167,7 +173,22 @@ function draw(context) {
     context.arc(pacman.x + 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
     context.lineTo(pacman.x, pacman.y);
     context.fill();
-  })
+  });
+
+  // Draw the exit
+  if (wallet >= level) {
+    const r = Math.floor((Math.sin(Date.now() / 50) / 2 + 0.5) * 16).toString(16);
+    const g = Math.floor((Math.sin(Date.now() / 25) / 2 + 0.5) * 16).toString(16);
+    const b = Math.floor((Math.sin(Date.now() / 75) / 2 + 0.5) * 16).toString(16);
+    context.fillStyle = `#${r}${g}${b}`;
+    context.beginPath();
+    context.moveTo(128, 106);
+    context.lineTo(132, 118);
+    context.lineTo(122, 110);
+    context.lineTo(134, 110);
+    context.lineTo(124, 118);
+    context.fill();
+  }
 
   // Draw the ghost (boo!)
   if (!ghost.eaten) {
@@ -293,7 +314,16 @@ function consume() {
   ghost.eaten = ghost.eaten || !dots.length;
 }
 
-draw(context);
+function exit() {
+  if (wallet >= level) {
+    const box = convertSpriteToBox(ghost);
+    if (collides(box, [124, 108, 8, 8])) {
+      wallet -= level;
+      level += 1;
+      initialize();
+    }
+  }
+}
 
 let counter = 0;
 function run() {
@@ -304,6 +334,7 @@ function run() {
   collisions();
   physics();
   portals();
+  exit();
   //draw(context);
 }
 
@@ -324,6 +355,7 @@ function nextLoop() {
   });
 }
 
+initialize();
 nextLoop();
 
 function keyDownHandler(event) {
@@ -347,6 +379,12 @@ function keyDownHandler(event) {
     ghost.vx = -1;	
     event.preventDefault();
 	}
+
+  if (ghost.eaten && [13, 32].includes(event.keyCode)) {
+    level = 1;
+    wallet = 0;
+    initialize();
+  }
 }
 
 canvas.addEventListener('click', event => {
