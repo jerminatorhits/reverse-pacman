@@ -130,8 +130,11 @@ function draw(context) {
     context.fill();
     context.fillStyle = "#000";
     context.beginPath();
-    context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
-    context.lineTo(pacman.x, pacman.y);
+    if (pacman.power) {
+      context.arc(pacman.x + pacman.vx, pacman.y + mouthRadius, mouthRadius, Math.PI, 0);
+    } else {
+      context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
+    }
     context.fill();
     context.fillStyle = "#FFF";
     context.beginPath();
@@ -143,12 +146,11 @@ function draw(context) {
     context.arc(pacman.x - 2, pacman.y - 2, 2, 0, Math.PI * 2);
     context.lineTo(pacman.x, pacman.y);
     context.fill();
-    context.fillStyle = "#0F0";
+    context.fillStyle = pacman.power ? "#F00" : "#0F0";
     context.beginPath();
     context.arc(pacman.x - 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
     context.lineTo(pacman.x, pacman.y);
     context.fill();
-    context.fillStyle = "#0F0";
     context.beginPath();
     context.arc(pacman.x + 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
     context.lineTo(pacman.x, pacman.y);
@@ -156,36 +158,38 @@ function draw(context) {
   })
 
   // Draw the ghost (boo!)
-  context.fillStyle = "#666";
-  context.beginPath();
-  context.arc(ghost.x, ghost.y, 6, Math.PI, Math.PI * 2);
-  context.lineTo(ghost.x + 6, ghost.y + 6);
-  context.lineTo(ghost.x + 4, ghost.y + 4);
-  context.lineTo(ghost.x + 2, ghost.y + 6);
-  context.lineTo(ghost.x , ghost.y + 4);
-  context.lineTo(ghost.x - 2, ghost.y + 6);
-  context.lineTo(ghost.x - 4, ghost.y + 4);
-  context.lineTo(ghost.x - 6, ghost.y + 6);
-  context.fill();   
-  context.fillStyle = "#BBB";
-  context.beginPath();
-  context.arc(ghost.x, ghost.y, 4, Math.PI, Math.PI * 2);
-  context.lineTo(ghost.x + 3, ghost.y + 2);
-  context.lineTo(ghost.x + 2, ghost.y + 4);
-  context.lineTo(ghost.x , ghost.y + 2);
-  context.lineTo(ghost.x - 2, ghost.y + 4);
-  context.lineTo(ghost.x - 3, ghost.y + 2);
-  context.fill();
-  context.fillStyle = "#000";
-  context.beginPath();
-  context.arc(ghost.x + 2, ghost.y - 1, 1, 0, Math.PI * 2);
-  context.lineTo(ghost.x, ghost.y);
-  context.fill();
-  context.fillStyle = "#000";
-  context.beginPath();
-  context.arc(ghost.x - 2, ghost.y - 1, 1, 0, Math.PI * 2);
-  context.lineTo(ghost.x, ghost.y);
-  context.fill();
+  if (!ghost.eaten) {
+    context.fillStyle = "#666";
+    context.beginPath();
+    context.arc(ghost.x, ghost.y, 6, Math.PI, Math.PI * 2);
+    context.lineTo(ghost.x + 6, ghost.y + 6);
+    context.lineTo(ghost.x + 4, ghost.y + 4);
+    context.lineTo(ghost.x + 2, ghost.y + 6);
+    context.lineTo(ghost.x , ghost.y + 4);
+    context.lineTo(ghost.x - 2, ghost.y + 6);
+    context.lineTo(ghost.x - 4, ghost.y + 4);
+    context.lineTo(ghost.x - 6, ghost.y + 6);
+    context.fill();   
+    context.fillStyle = "#BBB";
+    context.beginPath();
+    context.arc(ghost.x, ghost.y, 4, Math.PI, Math.PI * 2);
+    context.lineTo(ghost.x + 3, ghost.y + 2);
+    context.lineTo(ghost.x + 2, ghost.y + 4);
+    context.lineTo(ghost.x , ghost.y + 2);
+    context.lineTo(ghost.x - 2, ghost.y + 4);
+    context.lineTo(ghost.x - 3, ghost.y + 2);
+    context.fill();
+    context.fillStyle = "#000";
+    context.beginPath();
+    context.arc(ghost.x + 2, ghost.y - 1, 1, 0, Math.PI * 2);
+    context.lineTo(ghost.x, ghost.y);
+    context.fill();
+    context.fillStyle = "#000";
+    context.beginPath();
+    context.arc(ghost.x - 2, ghost.y - 1, 1, 0, Math.PI * 2);
+    context.lineTo(ghost.x, ghost.y);
+    context.fill();
+  }
 }
 
 function physics() {
@@ -226,6 +230,10 @@ function think() {
       const value = Math.random() > 0.5 ? 1 : -1;
       pacman[field] = value;
     }
+    // Countdown powerups
+    if (pacman.power > 0) {
+      pacman.power -= 1;
+    }
   });
 }
 
@@ -242,12 +250,21 @@ function portals() {
 function consume() {
   const chompBoxes = pacmans.map(convertSpriteToBox);
   dots = dots.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
-
+  chompBoxes.forEach((box, i) => {
+    if (pellets.some(pellet => collides(box, [...pellet, 1, 1]))) {
+      pacmans[i].power = 600;
+    }
+  });
+  pellets = pellets.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
   // eats pacmen on ghost collision
   chompBoxes.forEach((chompBox, index) => {
     const ghostBox = convertSpriteToBox(ghost);
     if (collides(chompBox, ghostBox)) {
-      pacmans.splice(index, 1);
+      if (pacmans[index].power || ghost.eaten) {
+        ghost.eaten = true;
+      } else {
+        pacmans.splice(index, 1);
+      }
     }
   });
 }
