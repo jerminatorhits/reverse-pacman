@@ -174,19 +174,23 @@ nextLoop();
 function keyDownHandler(event) {
   if (event.keyCode == 38) {
     ghost.vy = -1;
-    ghost.vx = 0;	
+    ghost.vx = 0;
+    event.preventDefault();
 	}
 	else if (event.keyCode == 39) {	
 		ghost.vy = 0;
     ghost.vx = 1;	
+    event.preventDefault();
 	}
 	else if (event.keyCode == 40) {	
 		ghost.vy = 1;
     ghost.vx = 0;	
+    event.preventDefault();
 	}
 	else if (event.keyCode == 37) {	
 		ghost.vy = 0;
     ghost.vx = -1;	
+    event.preventDefault();
 	}
 }
 
