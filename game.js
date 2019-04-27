@@ -316,6 +316,7 @@ function exit() {
   if (wallet >= level) {
     const box = convertSpriteToBox(ghost);
     if (collides(box, [124, 108, 8, 8])) {
+      wallet -= level;
       level += 1;
       initialize();
     }
