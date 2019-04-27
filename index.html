@@ -19,6 +19,9 @@
         border-radius: 5px;
         outline: none;
       }
+      button:active {
+        background-color: #272727;
+      }
       #game {
         width: 100vw;
         height: 100vw;
@@ -69,12 +72,12 @@
     <canvas width="256" height="256" id="game"></canvas>
     <div id="controls-container">
       <div class="controls-row">
-        <button id="up">Up</button>
+        <button id="up" onclick="moveUp()">Up</button>
       </div>
       <div class="controls-row">
-        <button id="left">Left</button>
-        <button id="down">Down</button>
-        <button id="right">Right</button>
+        <button id="left" onclick="moveLeft()">Left</button>
+        <button id="down" onclick="moveDown()">Down</button>
+        <button id="right" onclick="moveRight()">Right</button>
       </div>
     </div>
     <script src="game.js"></script>
