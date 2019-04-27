@@ -63,7 +63,7 @@ walls.slice().forEach(wall => {
 let dots, pellets, pacmans, ghost;
 
 let wallet = 0;
-let level = 0;
+let level = 1;
 
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
@@ -129,7 +129,7 @@ function draw(context) {
 
   // Draw the bottom menu
   const menuPacman = { x: 16, y: 240, vx: 0, vy: 0, static: true };
-  context.fillText(wallet, 26, 244);
+  context.fillText(`${wallet} / ${level}`, 26, 244);
 
   // Draw the pacmen
   const mouthRadius = ((Math.sin(Date.now() / 100) + 1) / 2) * 4; // chomp chomp
