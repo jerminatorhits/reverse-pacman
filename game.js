@@ -108,11 +108,34 @@ function physics() {
   })
 }
 
+function collisions() {
+  // Stop at walls
+  [ ...pacmans, ghost ].forEach(entity => {
+    const box = convertSpriteToBox(entity);
+    box[0] += entity.vx;
+    box[1] += entity.vy;
+    if (walls.some(wall => collides(wall, box))) {
+      entity.vx = 0;
+      entity.vy = 0;
+    }
+  })
+}
+
+function collides(boxA, boxB) {
+  return (boxA[0] < boxB[0] + boxB[2] &&
+    boxA[0] + boxA[2] > boxB[0] &&
+    boxA[1] < boxB[1] + boxB[3] &&
+    boxA[3] + boxA[1] > boxB[1]);
+}
+
+  // [ 96, 142, 28, 4 ],
+  // [  x,   y,  w, h ],
+
 draw(context);
 
 function run() {
   physics();
-  collisionDetection(convertSpriteToBox(pacmans[0]), convertSpriteToBox(ghost));
+  collisions();
   draw(context);
 }
 
@@ -140,19 +163,7 @@ canvas.addEventListener('click', event => {
   console.log(x, y);
 });
 
-function collisionDetection(boxA, boxB) {
-  if (boxA[0] < boxB[0] + boxB[2] &&
-    boxA[0] + boxA[2] > boxB[0] &&
-    boxA[1] < boxB[1] + boxB[3] &&
-    boxA[3] + boxA[1] > boxB[1]) {
-    // collision detected!
-  } else {
-      // no collision
-  }
-}
 
-  // [ 96, 142, 28, 4 ],
-  // [  x,   y,  w, h ],
 
 // pure function
 function convertSpriteToBox(sprite) {
