@@ -57,6 +57,8 @@ const pacmans = [
   { x: 22, y: 114, vx: 0, vy: 0 }
 ];
 
+const ghost = { x: 128, y: 112, vx: 0, vy: 0 };
+
 walls.slice().forEach(wall => {
   walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
 });
@@ -84,6 +86,19 @@ function draw(context) {
     context.lineTo(pacman.x, pacman.y);
     context.fill();
   })
+
+  // Draw the ghost (boo!)
+  context.fillStyle = "#F00";
+  context.beginPath();
+  context.arc(ghost.x, ghost.y, 6, Math.PI, Math.PI * 2);
+  context.lineTo(ghost.x + 6, ghost.y + 6);
+  context.lineTo(ghost.x + 4, ghost.y + 4);
+  context.lineTo(ghost.x + 2, ghost.y + 6);
+  context.lineTo(ghost.x , ghost.y + 4);
+  context.lineTo(ghost.x - 2, ghost.y + 6);
+  context.lineTo(ghost.x - 4, ghost.y + 4);
+  context.lineTo(ghost.x - 6, ghost.y + 6);
+  context.fill();   
 }
 
 draw(context);
