@@ -131,11 +131,23 @@ function collides(boxA, boxB) {
   // [ 96, 142, 28, 4 ],
   // [  x,   y,  w, h ],
 
+function think() {
+  pacmans.forEach(pacman => {
+    // Stopped at a wall
+    if (pacman.vx === 0 && pacman.vy === 0) {
+      const field = Math.random() > 0.5 ? 'vx' : 'vy';
+      const value = Math.random() > 0.5 ? 1 : -1;
+      pacman[field] = value;
+    }
+  });
+}
+
 draw(context);
 
 function run() {
-  physics();
   collisions();
+  think();
+  physics();
   draw(context);
 }
 
