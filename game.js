@@ -254,6 +254,13 @@ function consume() {
     }
   });
   pellets = pellets.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
+  // eats pacmen on ghost collision
+  chompBoxes.forEach((chompBox, index) => {
+    const ghostBox = convertSpriteToBox(ghost);
+    if (collides(chompBox, ghostBox)) {
+      pacmans.splice(index, 1);
+    }
+  });
 }
 
 draw(context);
