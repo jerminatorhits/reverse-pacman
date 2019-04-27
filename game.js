@@ -59,7 +59,7 @@ walls.slice().forEach(wall => {
   walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
 });
 
-const dots = [];
+let dots = [];
 const noDotZones = [
   [ 16, 80, 44, 64 ],
   [ 196, 80, 44, 64 ],
@@ -227,10 +227,16 @@ function portals() {
   });
 }
 
+function consume() {
+  const chompBoxes = pacmans.map(convertSpriteToBox);
+  dots = dots.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
+}
+
 draw(context);
 
 function run() {
   think();
+  consume();
   collisions();
   physics();
   portals();
