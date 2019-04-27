@@ -1,5 +1,8 @@
 console.log('hello from game.js');
 
+document.addEventListener("keydown",keyDownHandler, false);	
+document.addEventListener("keyup",keyUpHandler, false);	
+
 const walls = [
   [ 16, 24, 224, 2 ],
   [ 16, 24, 2, 56 ],
@@ -168,14 +171,40 @@ function nextLoop() {
 }
 
 nextLoop();
+function keyDownHandler(event) {
+  if (event.keyCode == 38) {
+    ghost.vy = -1;
+    ghost.vx = 0;	
+	}
+	else if (event.keyCode == 39) {	
+		ghost.vy = 0;
+    ghost.vx = 1;	
+	}
+	else if (event.keyCode == 40) {	
+		ghost.vy = 1;
+    ghost.vx = 0;	
+	}
+	else if (event.keyCode == 37) {	
+		ghost.vy = 0;
+    ghost.vx = -1;	
+	}
+}
+
+function keyUpHandler(event) {
+	var keyPressed = String.fromCharCode(event.keyCode);
+	if ((keyPressed == "W") || (keyPressed == "A") || 
+		(keyPressed == "S") || (keyPressed == "D"))
+	{
+		isMoving = false;
+	}
+}
+
 
 canvas.addEventListener('click', event => {
   const x = Math.floor((event.offsetX) / 600 * 256);
   const y = Math.floor((event.offsetY) / 600 * 256);
   console.log(x, y);
 });
-
-
 
 // pure function
 function convertSpriteToBox(sprite) {
