@@ -171,7 +171,22 @@ function draw(context) {
     context.arc(pacman.x + 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
     context.lineTo(pacman.x, pacman.y);
     context.fill();
-  })
+  });
+
+  // Draw the exit
+  if (wallet >= level) {
+    const r = Math.floor((Math.sin(Date.now() / 50) / 2 + 0.5) * 16).toString(16);
+    const g = Math.floor((Math.sin(Date.now() / 25) / 2 + 0.5) * 16).toString(16);
+    const b = Math.floor((Math.sin(Date.now() / 75) / 2 + 0.5) * 16).toString(16);
+    context.fillStyle = `#${r}${g}${b}`;
+    context.beginPath();
+    context.moveTo(128, 106);
+    context.lineTo(132, 118);
+    context.lineTo(122, 110);
+    context.lineTo(134, 110);
+    context.lineTo(124, 118);
+    context.fill();
+  }
 
   // Draw the ghost (boo!)
   if (!ghost.eaten) {
