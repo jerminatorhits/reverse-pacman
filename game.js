@@ -312,6 +312,16 @@ function consume() {
   ghost.eaten = ghost.eaten || !dots.length;
 }
 
+function exit() {
+  if (wallet >= level) {
+    const box = convertSpriteToBox(ghost);
+    if (collides(box, [124, 108, 8, 8])) {
+      level += 1;
+      initialize();
+    }
+  }
+}
+
 let counter = 0;
 function run() {
   counter += 1;
@@ -321,6 +331,7 @@ function run() {
   collisions();
   physics();
   portals();
+  exit();
   //draw(context);
 }
 
