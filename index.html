@@ -8,16 +8,75 @@
   <meta name="author" content="SitePoint">
 
   <style>
-      #game {
-          width: 600px;
-          height: 600px;
-          image-rendering: pixelated;
+      body {
+        margin: 0;
       }
+      button {
+        width: 33%;
+        height: 80px;
+        background-color: gray;
+        border: 1px solid darkblue;
+        border-radius: 5px;
+        outline: none;
+      }
+      #game {
+        width: 100vw;
+        height: 100vw;
+        image-rendering: pixelated;
+      }
+      #controls-container {
+        display: flex;
+        flex-direction: column;
+      }
+      .controls-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+      #up {
+
+      }
+      #down {
+        
+      }
+      #left {
+        
+      }
+      #right {
+        
+      }
+
+      @media screen and (min-width:768px){
+        #game {
+          /* width: 600px; */
+          /* height: 600px; */
+          image-rendering: pixelated;
+        }
+      }
+
+      @media screen and (min-width:1025px){
+        #game {
+          width: 100vh;
+          height: 100vh;
+          image-rendering: pixelated;
+        }
+      }
+
   </style>
   </head>
 
   <body>
     <canvas width="256" height="256" id="game"></canvas>
+    <div id="controls-container">
+      <div class="controls-row">
+        <button id="up">Up</button>
+      </div>
+      <div class="controls-row">
+        <button id="left">Left</button>
+        <button id="down">Down</button>
+        <button id="right">Right</button>
+      </div>
+    </div>
     <script src="game.js"></script>
   </body>
 </html>
