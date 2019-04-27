@@ -37,7 +37,7 @@ const walls = [
 
   // Lower T
   [ 96, 182, 28, 4 ],
-  [ 125, 182, 6, 24 ],
+  [ 125, 182, 6, 26 ],
 
   // Lower single walls
   [ 76, 122, 4, 24 ],
@@ -49,7 +49,7 @@ const walls = [
 
   // upside down kinda like T shapes
   [ 76, 182, 4, 24 ],
-  [ 36, 202, 64, 4 ],
+  [ 36, 202, 72, 6 ],
 
   // ghost box (boo!)
   [ 96, 104, 20, 18 ]
