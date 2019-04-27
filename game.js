@@ -56,7 +56,8 @@ const walls = [
 ];
 
 const pacmans = [
-  { x: 22, y: 114, vx: 1, vy: 0 }
+  { x: 22, y: 114, vx: 1, vy: 0 },
+  { x: 256 - 22, y: 114, vx: -1, vy: 0 }
 ];
 
 const ghost = { x: 128, y: 112, vx: 0, vy: 0 };
