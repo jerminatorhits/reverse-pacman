@@ -203,7 +203,7 @@ function draw(context) {
     context.fill();
   } else {
     context.fillStyle = "#FFF";
-    context.fillText("GAME OVER", 100, 16);
+    context.fillText("GAME OVER", 98, 16);
   }
 }
 
