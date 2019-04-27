@@ -54,7 +54,7 @@ const walls = [
 ];
 
 const pacmans = [
-  { x: 22, y: 114, vx: 0, vy: 0 }
+  { x: 22, y: 114, vx: 1, vy: 0 }
 ];
 
 const ghost = { x: 128, y: 112, vx: 0, vy: 0 };
@@ -101,7 +101,28 @@ function draw(context) {
   context.fill();   
 }
 
+function physics() {
+  [ ...pacmans, ghost ].forEach(entity => {
+    entity.x += entity.vx;
+    entity.y += entity.vy;
+  })
+}
+
 draw(context);
+
+function run() {
+  physics();
+  draw(context);
+}
+
+function nextLoop() {
+  requestAnimationFrame(() => {
+    run();
+    nextLoop();
+  });
+}
+
+nextLoop();
 
 canvas.addEventListener('click', event => {
   const x = Math.floor((event.offsetX) / 600 * 256);
