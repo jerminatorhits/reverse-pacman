@@ -60,11 +60,13 @@ walls.slice().forEach(wall => {
 });
 
 const dots = [];
-for (let x = 19; x < 230; x += 6) {
-  for (let y = 28; y < 220; y += 6) {
+for (let x = 19; x < 230; x += 2) {
+  for (let y = 27; y < 220; y += 2) {
     const box = [ x, y, 12, 12 ];
     if (!walls.some(otherBox => collides(box, otherBox))) {
-      dots.push([ x + 6, y + 6 ]);
+      if (!dots.some(dot => collides(box, [...dot, 1, 1]))) {
+        dots.push([ x + 6, y + 6 ]);
+      }
     }
   }
 }
