@@ -379,6 +379,12 @@ function keyDownHandler(event) {
     ghost.vx = -1;	
     event.preventDefault();
 	}
+
+  if (ghost.eaten && [13, 32].includes(event.keyCode)) {
+    level = 1;
+    wallet = 0;
+    initialize();
+  }
 }
 
 canvas.addEventListener('click', event => {
