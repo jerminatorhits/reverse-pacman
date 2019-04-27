@@ -14,7 +14,7 @@ const walls = [
 
   // edge extrusions
   [ 125, 24, 6, 24 ],
-  [ 16, 182, 16, 6 ],
+  [ 16, 182, 20, 4 ],
 
   // inner blocks
   [ 32, 38, 28, 10 ],
@@ -34,16 +34,23 @@ const walls = [
   [ 125, 142, 6, 24 ],
 
   // Lower T
-  [ 96, 182, 28, 6 ],
-  [ 125, 182, 6, 22 ],
+  [ 96, 182, 28, 4 ],
+  [ 125, 182, 6, 24 ],
 
   // Lower single walls
   [ 76, 122, 4, 24 ],
   [ 76, 162, 32, 4 ],
 
-  [ 32, 162, 28, 4 ],
-  [ 54, 162, 6, 26 ],
+  // rotated L parts near the bottom
+  [ 36, 162, 24, 4 ],
+  [ 54, 162, 6, 24 ],
 
+  // upside down kinda like T shapes
+  [ 76, 182, 4, 24 ],
+  [ 36, 202, 64, 4 ],
+
+  // ghost box (boo!)
+  [ 96, 104, 20, 18 ]
 ];
 
 walls.slice().forEach(wall => {
