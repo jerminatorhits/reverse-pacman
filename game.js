@@ -37,7 +37,7 @@ const walls = [
 
   // Lower T
   [ 96, 182, 28, 4 ],
-  [ 125, 182, 6, 24 ],
+  [ 125, 182, 6, 26 ],
 
   // Lower single walls
   [ 76, 122, 4, 24 ],
@@ -49,11 +49,34 @@ const walls = [
 
   // upside down kinda like T shapes
   [ 76, 182, 4, 24 ],
-  [ 36, 202, 64, 4 ],
+  [ 36, 202, 72, 6 ],
 
   // ghost box (boo!)
   [ 96, 104, 20, 18 ]
 ];
+
+walls.slice().forEach(wall => {
+  walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
+});
+
+const dots = [];
+const noDotZones = [
+  [ 16, 80, 44, 64 ],
+  [ 196, 80, 44, 64 ],
+  [ 80, 80, 96, 64 ]
+];
+for (let x = 19; x < 230; x += 2) {
+  for (let y = 27; y < 220; y += 2) {
+    const box = [ x, y, 12, 12 ];
+    if (!noDotZones.some(zone => collides(box, zone))) {
+      if (!walls.some(otherBox => collides(box, otherBox))) {
+        if (!dots.some(dot => collides(box, [...dot, 1, 1]))) {
+          dots.push([ x + 6, y + 6 ]);
+        }
+      }
+    }
+  }
+}
 
 const pacmans = [
   { x: 22, y: 114, vx: 1, vy: 0 },
@@ -61,10 +84,6 @@ const pacmans = [
 ];
 
 const ghost = { x: 128, y: 112, vx: 0, vy: 0 };
-
-walls.slice().forEach(wall => {
-  walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
-});
 
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
@@ -79,6 +98,14 @@ function draw(context) {
   context.strokeStyle = "#00F";
   walls.forEach(wall => {
     context.strokeRect(wall[0], wall[1], wall[2], wall[3]);
+  });
+
+  // Draw the dots
+  context.fillStyle = "#FFF";
+  dots.forEach(dot => {
+    context.beginPath();
+    context.arc(dot[0], dot[1], 1, 0, Math.PI * 2);
+    context.fill();
   });
 
   // Draw the pacmen
@@ -207,7 +234,7 @@ function run() {
   collisions();
   physics();
   portals();
-  draw(context);
+  //draw(context);
 }
 
 let lastTime;
@@ -222,6 +249,7 @@ function nextLoop() {
     for (let i = 0; i < frames; i += 1) {
       run();
     }
+    draw(context);
     nextLoop();
   });
 }
