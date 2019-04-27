@@ -239,8 +239,8 @@ function think() {
 
 function spawn() {
   if (counter % 600 === 0) {
-    pacmans.push({ x: 0, y: 114, vx: -1, vy: 0, power: 300 });
-    pacmans.push({ x: 0, y: 114, vx: 1, vy: 0, power: 300 });
+    pacmans.push({ x: 0, y: 114, vx: -1, vy: 0, power: 600 });
+    pacmans.push({ x: 0, y: 114, vx: 1, vy: 0, power: 600 });
   }
 }
 
