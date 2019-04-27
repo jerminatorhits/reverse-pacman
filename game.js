@@ -78,6 +78,13 @@ for (let x = 19; x < 230; x += 2) {
   }
 }
 
+let pellets = [];
+for (let i = 0; i < 4; i += 1) {
+  const dot = dots[Math.floor(Math.random() * dots.length)];
+  dots = dots.filter(d => d !== dot);
+  pellets.push(dot);
+}
+
 const pacmans = [
   { x: 22, y: 114, vx: 1, vy: 0 },
   { x: 256 - 22, y: 114, vx: -1, vy: 0 }
@@ -100,11 +107,16 @@ function draw(context) {
     context.strokeRect(wall[0], wall[1], wall[2], wall[3]);
   });
 
-  // Draw the dots
+  // Draw the dots and pellets
   context.fillStyle = "#FFF";
   dots.forEach(dot => {
     context.beginPath();
     context.arc(dot[0], dot[1], 1, 0, Math.PI * 2);
+    context.fill();
+  });
+  pellets.forEach(dot => {
+    context.beginPath();
+    context.arc(dot[0], dot[1], 3, 0, Math.PI * 2);
     context.fill();
   });
 
@@ -118,7 +130,7 @@ function draw(context) {
     context.fill();
     context.fillStyle = "#000";
     context.beginPath();
-    context.arc(pacman.x, pacman.y, mouthRadius, 0, Math.PI);
+    context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
     context.lineTo(pacman.x, pacman.y);
     context.fill();
     context.fillStyle = "#FFF";
