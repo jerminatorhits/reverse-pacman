@@ -91,7 +91,7 @@ function initialize() {
   }
 
   pellets = [];
-  for (let i = 0; i < 4; i += 1) {
+  for (let i = 0; i < 3 + level; i += 1) {
     const dot = dots[Math.floor(Math.random() * dots.length)];
     dots = dots.filter(d => d !== dot);
     pellets.push(dot);
