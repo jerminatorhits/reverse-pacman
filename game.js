@@ -117,7 +117,7 @@ function draw(context) {
   })
 
   // Draw the ghost (boo!)
-  context.fillStyle = "#F00";
+  context.fillStyle = "#888";
   context.beginPath();
   context.arc(ghost.x, ghost.y, 6, Math.PI, Math.PI * 2);
   context.lineTo(ghost.x + 6, ghost.y + 6);
