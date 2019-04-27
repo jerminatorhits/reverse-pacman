@@ -55,9 +55,19 @@ const walls = [
   [ 96, 104, 20, 18 ]
 ];
 
-const dots = [
-  [ 25, 34 ]
-];
+walls.slice().forEach(wall => {
+  walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
+});
+
+const dots = [];
+for (let x = 19; x < 230; x += 6) {
+  for (let y = 28; y < 220; y += 6) {
+    const box = [ x, y, 12, 12 ];
+    if (!walls.some(otherBox => collides(box, otherBox))) {
+      dots.push([ x + 6, y + 6 ]);
+    }
+  }
+}
 
 const pacmans = [
   { x: 22, y: 114, vx: 1, vy: 0 },
@@ -65,10 +75,6 @@ const pacmans = [
 ];
 
 const ghost = { x: 128, y: 112, vx: 0, vy: 0 };
-
-walls.slice().forEach(wall => {
-  walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
-});
 
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
@@ -219,7 +225,7 @@ function run() {
   collisions();
   physics();
   portals();
-  draw(context);
+  //draw(context);
 }
 
 let lastTime;
@@ -234,6 +240,7 @@ function nextLoop() {
     for (let i = 0; i < frames; i += 1) {
       run();
     }
+    draw(context);
     nextLoop();
   });
 }
