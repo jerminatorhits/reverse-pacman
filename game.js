@@ -201,6 +201,9 @@ function draw(context) {
     context.arc(ghost.x - 2, ghost.y - 1, 1, 0, Math.PI * 2);
     context.lineTo(ghost.x, ghost.y);
     context.fill();
+  } else {
+    context.fillStyle = "#FFF";
+    context.fillText("GAME OVER", 100, 16);
   }
 }
 
@@ -287,6 +290,7 @@ function consume() {
       }
     }
   });
+  ghost.eaten = ghost.eaten || !dots.length;
 }
 
 draw(context);
