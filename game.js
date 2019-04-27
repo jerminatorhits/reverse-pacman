@@ -53,6 +53,10 @@ const walls = [
   [ 96, 104, 20, 18 ]
 ];
 
+const pacmans = [
+  { x: 22, y: 114, vx: 0, vy: 0 }
+];
+
 walls.slice().forEach(wall => {
   walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
 });
@@ -60,16 +64,29 @@ walls.slice().forEach(wall => {
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 
-context.fillStyle = "#000";
-context.fillRect(0, 0, 256, 256);
 
-function drawBoard(context) {
+function draw(context) {
+  // Clear the screen
+  context.fillStyle = "#000";
+  context.fillRect(0, 0, 256, 256);
+  
+  // Draw the walls
   context.strokeStyle = "#00F";
   walls.forEach(wall => {
     context.strokeRect(wall[0], wall[1], wall[2], wall[3]);
   });
+
+  // Draw the pacmen
+  context.fillStyle = "#FF0";
+  pacmans.forEach(pacman => {
+    context.beginPath();
+    context.arc(pacman.x, pacman.y, 6, Math.PI/4, Math.PI * 2 - Math.PI/4);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+  })
 }
-drawBoard(context);
+
+draw(context);
 
 canvas.addEventListener('click', event => {
   const x = Math.floor((event.offsetX) / 600 * 256);
