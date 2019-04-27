@@ -118,7 +118,7 @@ function draw(context) {
     context.fill();
     context.fillStyle = "#000";
     context.beginPath();
-    context.arc(pacman.x, pacman.y, mouthRadius, 0, Math.PI);
+    context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
     context.lineTo(pacman.x, pacman.y);
     context.fill();
     context.fillStyle = "#FFF";
