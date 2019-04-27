@@ -144,12 +144,23 @@ function think() {
   });
 }
 
+function portals() {
+  [ ...pacmans, ghost ].forEach(entity => {
+    if (entity.x < 0) {
+      entity.x += 256;
+    } else if (entity.x > 256) {
+      entity.x -= 256;
+    }
+  });
+}
+
 draw(context);
 
 function run() {
   collisions();
   think();
   physics();
+  portals();
   draw(context);
 }
 
