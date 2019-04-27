@@ -171,6 +171,7 @@ function nextLoop() {
 }
 
 nextLoop();
+
 function keyDownHandler(event) {
   if (event.keyCode == 38) {
     ghost.vy = -1;
@@ -189,16 +190,6 @@ function keyDownHandler(event) {
     ghost.vx = -1;	
 	}
 }
-
-function keyUpHandler(event) {
-	var keyPressed = String.fromCharCode(event.keyCode);
-	if ((keyPressed == "W") || (keyPressed == "A") || 
-		(keyPressed == "S") || (keyPressed == "D"))
-	{
-		isMoving = false;
-	}
-}
-
 
 canvas.addEventListener('click', event => {
   const x = Math.floor((event.offsetX) / 600 * 256);
