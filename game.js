@@ -158,36 +158,38 @@ function draw(context) {
   })
 
   // Draw the ghost (boo!)
-  context.fillStyle = "#666";
-  context.beginPath();
-  context.arc(ghost.x, ghost.y, 6, Math.PI, Math.PI * 2);
-  context.lineTo(ghost.x + 6, ghost.y + 6);
-  context.lineTo(ghost.x + 4, ghost.y + 4);
-  context.lineTo(ghost.x + 2, ghost.y + 6);
-  context.lineTo(ghost.x , ghost.y + 4);
-  context.lineTo(ghost.x - 2, ghost.y + 6);
-  context.lineTo(ghost.x - 4, ghost.y + 4);
-  context.lineTo(ghost.x - 6, ghost.y + 6);
-  context.fill();   
-  context.fillStyle = "#BBB";
-  context.beginPath();
-  context.arc(ghost.x, ghost.y, 4, Math.PI, Math.PI * 2);
-  context.lineTo(ghost.x + 3, ghost.y + 2);
-  context.lineTo(ghost.x + 2, ghost.y + 4);
-  context.lineTo(ghost.x , ghost.y + 2);
-  context.lineTo(ghost.x - 2, ghost.y + 4);
-  context.lineTo(ghost.x - 3, ghost.y + 2);
-  context.fill();
-  context.fillStyle = "#000";
-  context.beginPath();
-  context.arc(ghost.x + 2, ghost.y - 1, 1, 0, Math.PI * 2);
-  context.lineTo(ghost.x, ghost.y);
-  context.fill();
-  context.fillStyle = "#000";
-  context.beginPath();
-  context.arc(ghost.x - 2, ghost.y - 1, 1, 0, Math.PI * 2);
-  context.lineTo(ghost.x, ghost.y);
-  context.fill();
+  if (!ghost.eaten) {
+    context.fillStyle = "#666";
+    context.beginPath();
+    context.arc(ghost.x, ghost.y, 6, Math.PI, Math.PI * 2);
+    context.lineTo(ghost.x + 6, ghost.y + 6);
+    context.lineTo(ghost.x + 4, ghost.y + 4);
+    context.lineTo(ghost.x + 2, ghost.y + 6);
+    context.lineTo(ghost.x , ghost.y + 4);
+    context.lineTo(ghost.x - 2, ghost.y + 6);
+    context.lineTo(ghost.x - 4, ghost.y + 4);
+    context.lineTo(ghost.x - 6, ghost.y + 6);
+    context.fill();   
+    context.fillStyle = "#BBB";
+    context.beginPath();
+    context.arc(ghost.x, ghost.y, 4, Math.PI, Math.PI * 2);
+    context.lineTo(ghost.x + 3, ghost.y + 2);
+    context.lineTo(ghost.x + 2, ghost.y + 4);
+    context.lineTo(ghost.x , ghost.y + 2);
+    context.lineTo(ghost.x - 2, ghost.y + 4);
+    context.lineTo(ghost.x - 3, ghost.y + 2);
+    context.fill();
+    context.fillStyle = "#000";
+    context.beginPath();
+    context.arc(ghost.x + 2, ghost.y - 1, 1, 0, Math.PI * 2);
+    context.lineTo(ghost.x, ghost.y);
+    context.fill();
+    context.fillStyle = "#000";
+    context.beginPath();
+    context.arc(ghost.x - 2, ghost.y - 1, 1, 0, Math.PI * 2);
+    context.lineTo(ghost.x, ghost.y);
+    context.fill();
+  }
 }
 
 function physics() {
@@ -258,7 +260,11 @@ function consume() {
   chompBoxes.forEach((chompBox, index) => {
     const ghostBox = convertSpriteToBox(ghost);
     if (collides(chompBox, ghostBox)) {
-      pacmans.splice(index, 1);
+      if (pacmans[index].power || ghost.eaten) {
+        ghost.eaten = true;
+      } else {
+        pacmans.splice(index, 1);
+      }
     }
   });
 }
