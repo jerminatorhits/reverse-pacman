@@ -15,22 +15,23 @@ const walls = [
   [ 16, 224, 224, 2 ],
 
   // edge extrusions
-  [ 125, 24, 6, 24 ],
+  [ 125, 24, 6, 22 ],
   [ 16, 182, 20, 4 ],
 
   // inner blocks
-  [ 32, 40, 78, 8 ],
+  [ 32, 42, 76, 4 ],
 
   // Upper T
   [ 125, 62, 6, 22 ],
-  [ 76, 62, 34, 4 ],
+  [ 76, 62, 32, 4 ],
 
   // Sideways upper left T
-  [ 32, 62, 28, 4 ],
   [ 76, 62, 4, 42 ],
 
+  [ 32, 62, 28, 4 ],
+
   // small inner block
-  [ 96, 80, 14, 4 ],
+  [ 96, 80, 12, 4 ],
 
   // Middle T
   [ 96, 142, 28, 4 ],
@@ -53,7 +54,7 @@ const walls = [
   [ 36, 202, 72, 6 ],
 
   // ghost box (boo!)
-  [ 96, 104, 14, 18 ]
+  [ 96, 104, 12, 18 ]
 ];
 
 walls.slice().forEach(wall => {
@@ -239,8 +240,8 @@ function collisions() {
   // Stop at walls
   [ ...pacmans, ghost ].forEach(entity => {
     const box = convertSpriteToBox(entity);
-    box[0] += entity.vx * 2;
-    box[1] += entity.vy * 2;
+    box[0] += entity.vx * 3;
+    box[1] += entity.vy * 3;
     if (walls.some(wall => collides(wall, box))) {
       entity.vx = 0;
       entity.vy = 0;
