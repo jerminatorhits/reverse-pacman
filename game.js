@@ -7,8 +7,8 @@ const walls = [
   [ 16, 24, 2, 56 ],
   [ 16, 80, 44, 2 ],
   [ 58, 80, 2, 24 ],
-  [ 16, 102, 44, 2 ],
-  [ 16, 122, 44, 2 ],
+  [ 0, 102, 60, 2 ],
+  [ 0, 122, 60, 2 ],
   [ 58, 122, 2, 24 ],
   [ 16, 144, 44, 2 ],
   [ 16, 144, 2, 80 ],
@@ -82,16 +82,42 @@ function draw(context) {
   });
 
   // Draw the pacmen
-  context.fillStyle = "#FF0";
+  const mouthRadius = ((Math.sin(Date.now() / 100) + 1) / 2) * 4; // chomp chomp
   pacmans.forEach(pacman => {
+    context.fillStyle = "#FF0";    
     context.beginPath();
-    context.arc(pacman.x, pacman.y, 6, Math.PI/4, Math.PI * 2 - Math.PI/4);
+    context.arc(pacman.x, pacman.y, 6, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#000";
+    context.beginPath();
+    context.arc(pacman.x, pacman.y, mouthRadius, 0, Math.PI);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(pacman.x + 2, pacman.y - 2, 2, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(pacman.x - 2, pacman.y - 2, 2, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#0F0";
+    context.beginPath();
+    context.arc(pacman.x - 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#0F0";
+    context.beginPath();
+    context.arc(pacman.x + 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
     context.lineTo(pacman.x, pacman.y);
     context.fill();
   })
 
   // Draw the ghost (boo!)
-  context.fillStyle = "#F00";
+  context.fillStyle = "#666";
   context.beginPath();
   context.arc(ghost.x, ghost.y, 6, Math.PI, Math.PI * 2);
   context.lineTo(ghost.x + 6, ghost.y + 6);
@@ -102,6 +128,25 @@ function draw(context) {
   context.lineTo(ghost.x - 4, ghost.y + 4);
   context.lineTo(ghost.x - 6, ghost.y + 6);
   context.fill();   
+  context.fillStyle = "#BBB";
+  context.beginPath();
+  context.arc(ghost.x, ghost.y, 4, Math.PI, Math.PI * 2);
+  context.lineTo(ghost.x + 3, ghost.y + 2);
+  context.lineTo(ghost.x + 2, ghost.y + 4);
+  context.lineTo(ghost.x , ghost.y + 2);
+  context.lineTo(ghost.x - 2, ghost.y + 4);
+  context.lineTo(ghost.x - 3, ghost.y + 2);
+  context.fill();
+  context.fillStyle = "#000";
+  context.beginPath();
+  context.arc(ghost.x + 2, ghost.y - 1, 1, 0, Math.PI * 2);
+  context.lineTo(ghost.x, ghost.y);
+  context.fill();
+  context.fillStyle = "#000";
+  context.beginPath();
+  context.arc(ghost.x - 2, ghost.y - 1, 1, 0, Math.PI * 2);
+  context.lineTo(ghost.x, ghost.y);
+  context.fill();
 }
 
 function physics() {
@@ -115,8 +160,8 @@ function collisions() {
   // Stop at walls
   [ ...pacmans, ghost ].forEach(entity => {
     const box = convertSpriteToBox(entity);
-    box[0] += entity.vx;
-    box[1] += entity.vy;
+    box[0] += entity.vx * 2;
+    box[1] += entity.vy * 2;
     if (walls.some(wall => collides(wall, box))) {
       entity.vx = 0;
       entity.vy = 0;
@@ -158,8 +203,8 @@ function portals() {
 draw(context);
 
 function run() {
-  collisions();
   think();
+  collisions();
   physics();
   portals();
   draw(context);
