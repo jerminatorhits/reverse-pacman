@@ -115,9 +115,18 @@ function run() {
   draw(context);
 }
 
+let lastTime;
 function nextLoop() {
-  requestAnimationFrame(() => {
-    run();
+  requestAnimationFrame(timestamp => {
+    if (!lastTime) lastTime = timestamp;
+    const delta = timestamp - lastTime;
+    const frames = Math.floor(120 * delta / 1000);
+    if (frames > 0) {
+      lastTime = timestamp;
+    }
+    for (let i = 0; i < frames; i += 1) {
+      run();
+    }
     nextLoop();
   });
 }
