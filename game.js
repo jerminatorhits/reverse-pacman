@@ -60,44 +60,48 @@ walls.slice().forEach(wall => {
   walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
 });
 
-let dots = [];
-const noDotZones = [
-  [ 16, 80, 44, 64 ],
-  [ 196, 80, 44, 64 ],
-  [ 80, 80, 96, 64 ]
-];
-for (let x = 19; x < 230; x += 2) {
-  for (let y = 27; y < 220; y += 2) {
-    const box = [ x, y, 12, 12 ];
-    if (!noDotZones.some(zone => collides(box, zone))) {
-      if (!walls.some(otherBox => collides(box, otherBox))) {
-        if (!dots.some(dot => collides(box, [...dot, 1, 1]))) {
-          dots.push([ x + 6, y + 6 ]);
-        }
-      }
-    }
-  }
-}
+let dots, pellets, pacmans, ghost;
 
-let pellets = [];
-for (let i = 0; i < 4; i += 1) {
-  const dot = dots[Math.floor(Math.random() * dots.length)];
-  dots = dots.filter(d => d !== dot);
-  pellets.push(dot);
-}
-
-const pacmans = [
-  { x: 22, y: 114, vx: 1, vy: 0 },
-  { x: 256 - 22, y: 114, vx: -1, vy: 0 }
-];
-
-const ghost = { x: 128, y: 112, vx: 0, vy: 0 };
 let wallet = 0;
-
+let level = 0;
 
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 
+function initialize() {
+  ghost = { x: 128, y: 112, vx: 0, vy: 0 };
+
+  dots = [];
+  const noDotZones = [
+    [ 16, 80, 44, 64 ],
+    [ 196, 80, 44, 64 ],
+    [ 80, 80, 96, 64 ]
+  ];
+  for (let x = 19; x < 230; x += 2) {
+    for (let y = 27; y < 220; y += 2) {
+      const box = [ x, y, 12, 12 ];
+      if (!noDotZones.some(zone => collides(box, zone))) {
+        if (!walls.some(otherBox => collides(box, otherBox))) {
+          if (!dots.some(dot => collides(box, [...dot, 1, 1]))) {
+            dots.push([ x + 6, y + 6 ]);
+          }
+        }
+      }
+    }
+  }
+
+  pellets = [];
+  for (let i = 0; i < 4; i += 1) {
+    const dot = dots[Math.floor(Math.random() * dots.length)];
+    dots = dots.filter(d => d !== dot);
+    pellets.push(dot);
+  }
+
+  pacmans = [
+    { x: 22, y: 114, vx: 1, vy: 0 },
+    { x: 256 - 22, y: 114, vx: -1, vy: 0 }
+  ];
+}
 
 function draw(context) {
   // Clear the screen
@@ -293,8 +297,6 @@ function consume() {
   ghost.eaten = ghost.eaten || !dots.length;
 }
 
-draw(context);
-
 let counter = 0;
 function run() {
   counter += 1;
@@ -324,6 +326,7 @@ function nextLoop() {
   });
 }
 
+initialize();
 nextLoop();
 
 function keyDownHandler(event) {
