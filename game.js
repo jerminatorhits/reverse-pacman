@@ -19,8 +19,8 @@ const walls = [
   [ 16, 182, 20, 4 ],
 
   // inner blocks
-  [ 32, 40, 28, 8 ],
-  [ 76, 40, 32, 8 ],
+  [ 32, 40, 48, 8 ],
+  [ 96, 40, 14, 8 ],
 
   // Upper T
   [ 96, 62, 28, 4 ],
@@ -28,7 +28,7 @@ const walls = [
 
   // Sideways upper left T
   [ 32, 62, 27, 4 ],
-  [ 76, 62, 4, 42 ],
+  [ 76, 40, 4, 64 ],
   [ 76, 80, 26, 4 ],
 
   // Middle T
@@ -44,11 +44,11 @@ const walls = [
   [ 76, 162, 32, 4 ],
 
   // rotated L parts near the bottom
+  [ 76, 162, 4, 24 ],
   [ 36, 162, 24, 4 ],
-  [ 54, 162, 6, 24 ],
 
   // upside down kinda like T shapes
-  [ 76, 182, 4, 24 ],
+  [ 54, 182, 6, 24 ],
   [ 36, 202, 72, 6 ],
 
   // ghost box (boo!)
