@@ -1,7 +1,6 @@
 console.log('hello from game.js');
 
-document.addEventListener("keydown",keyDownHandler, false);	
-document.addEventListener("keyup",keyUpHandler, false);	
+document.addEventListener("keydown",keyDownHandler, false);
 
 const walls = [
   [ 16, 24, 224, 2 ],
