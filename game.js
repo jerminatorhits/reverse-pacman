@@ -3,20 +3,20 @@ console.log('hello from game.js');
 document.addEventListener("keydown",keyDownHandler, false);
 
 const walls = [
-  [ 16, 24, 224, 2 ],
+  [ 18, 24, 109.5, 2 ],
   [ 16, 24, 2, 56 ],
-  [ 16, 80, 44, 2 ],
+  [ 16, 80, 42, 2 ],
   [ 58, 80, 2, 24 ],
-  [ 0, 102, 60, 2 ],
-  [ 0, 122, 60, 2 ],
+  [ 0, 102, 58, 2 ],
+  [ 0, 122, 58, 2 ],
   [ 58, 122, 2, 24 ],
-  [ 16, 144, 44, 2 ],
+  [ 18, 144, 40, 2 ],
   [ 16, 144, 2, 80 ],
-  [ 16, 224, 224, 2 ],
+  [ 16, 224, 111.5, 2 ],
 
   // edge extrusions
-  [ 125, 24, 6, 22 ],
-  [ 16, 182, 20, 4 ],
+  [ 125, 26, 6, 20 ],
+  [ 18, 182, 18, 4 ],
 
   // inner blocks
   [ 32, 42, 76, 4 ],
@@ -26,7 +26,7 @@ const walls = [
   [ 76, 62, 32, 4 ],
 
   // Sideways upper left T
-  [ 76, 62, 4, 42 ],
+  [ 76, 66, 4, 38 ],
 
   [ 32, 62, 28, 4 ],
 
@@ -34,23 +34,23 @@ const walls = [
   [ 96, 80, 12, 4 ],
 
   // Middle T
-  [ 96, 142, 28, 4 ],
-  [ 125, 142, 6, 24 ],
+  [ 96, 142, 31.5, 4 ],
+  [ 125, 143, 6, 23 ],
 
   // Lower T
-  [ 96, 182, 28, 4 ],
-  [ 125, 182, 6, 26 ],
+  [ 96, 182, 31.5, 4 ],
+  [ 125, 183, 6, 25 ],
 
   // Lower single walls
   [ 76, 122, 4, 24 ],
-  [ 76, 162, 32, 4 ],
+  [ 80, 162, 28, 4 ],
 
   // rotated L parts near the bottom
   [ 76, 162, 4, 24 ],
   [ 36, 162, 24, 4 ],
 
   // upside down kinda like T shapes
-  [ 54, 182, 6, 24 ],
+  [ 54, 182, 6, 20 ],
   [ 36, 202, 72, 6 ],
 
   // ghost box (boo!)
@@ -112,9 +112,11 @@ function draw(context) {
   context.fillRect(0, 0, 256, 256);
   
   // Draw the walls
+  context.fillStyle = "#00F";
   context.strokeStyle = "#00F";
   walls.forEach(wall => {
     context.strokeRect(wall[0], wall[1], wall[2], wall[3]);
+    context.fillRect(wall[0], wall[1], wall[2], wall[3]);
   });
 
   // Draw the dots and pellets
