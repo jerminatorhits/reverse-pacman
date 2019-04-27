@@ -60,12 +60,19 @@ walls.slice().forEach(wall => {
 });
 
 const dots = [];
+const noDotZones = [
+  [ 16, 80, 44, 64 ],
+  [ 196, 80, 44, 64 ],
+  [ 80, 80, 96, 64 ]
+];
 for (let x = 19; x < 230; x += 2) {
   for (let y = 27; y < 220; y += 2) {
     const box = [ x, y, 12, 12 ];
-    if (!walls.some(otherBox => collides(box, otherBox))) {
-      if (!dots.some(dot => collides(box, [...dot, 1, 1]))) {
-        dots.push([ x + 6, y + 6 ]);
+    if (!noDotZones.some(zone => collides(box, zone))) {
+      if (!walls.some(otherBox => collides(box, otherBox))) {
+        if (!dots.some(dot => collides(box, [...dot, 1, 1]))) {
+          dots.push([ x + 6, y + 6 ]);
+        }
       }
     }
   }
