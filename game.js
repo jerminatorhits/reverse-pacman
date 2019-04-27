@@ -203,8 +203,8 @@ function portals() {
 draw(context);
 
 function run() {
-  collisions();
   think();
+  collisions();
   physics();
   portals();
   draw(context);
