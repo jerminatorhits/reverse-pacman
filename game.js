@@ -82,10 +82,35 @@ function draw(context) {
   });
 
   // Draw the pacmen
-  context.fillStyle = "#FF0";
   pacmans.forEach(pacman => {
+    context.fillStyle = "#FF0";    
     context.beginPath();
-    context.arc(pacman.x, pacman.y, 6, Math.PI/4, Math.PI * 2 - Math.PI/4);
+    context.arc(pacman.x, pacman.y, 6, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#000";
+    context.beginPath();
+    context.arc(pacman.x, pacman.y, 4, 0, Math.PI);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(pacman.x + 2, pacman.y - 2, 2, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(pacman.x - 2, pacman.y - 2, 2, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#0F0";
+    context.beginPath();
+    context.arc(pacman.x - 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#0F0";
+    context.beginPath();
+    context.arc(pacman.x + 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
     context.lineTo(pacman.x, pacman.y);
     context.fill();
   })
