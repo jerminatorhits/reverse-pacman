@@ -92,6 +92,8 @@ const pacmans = [
 ];
 
 const ghost = { x: 128, y: 112, vx: 0, vy: 0 };
+let wallet = 0;
+
 
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
@@ -121,9 +123,13 @@ function draw(context) {
     context.fill();
   });
 
+  // Draw the bottom menu
+  const menuPacman = { x: 16, y: 240, vx: 0, vy: 0, static: true };
+  context.fillText(wallet, 26, 244);
+
   // Draw the pacmen
   const mouthRadius = ((Math.sin(Date.now() / 100) + 1) / 2) * 4; // chomp chomp
-  pacmans.forEach(pacman => {
+  [ ...pacmans, menuPacman ].forEach(pacman => {
     context.fillStyle = pacman.power ? "#F80" : "#FF0";
     context.beginPath();
     context.arc(pacman.x, pacman.y, 6, 0, Math.PI * 2);
@@ -131,10 +137,15 @@ function draw(context) {
     context.fill();
     context.fillStyle = "#000";
     context.beginPath();
-    if (pacman.power) {
-      context.arc(pacman.x + pacman.vx, pacman.y + mouthRadius, mouthRadius, Math.PI, 0);
-    } else {
-      context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
+    if (pacman.static) {
+      context.arc(pacman.x, pacman.y, 4, 0, Math.PI);
+    }
+    else {
+      if (pacman.power) {
+        context.arc(pacman.x + pacman.vx, pacman.y + mouthRadius, mouthRadius, Math.PI, 0);
+      } else {
+        context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
+      }
     }
     context.fill();
     context.fillStyle = "#FFF";
@@ -272,6 +283,7 @@ function consume() {
         ghost.eaten = true;
       } else {
         pacmans.splice(index, 1);
+        wallet++;
       }
     }
   });
