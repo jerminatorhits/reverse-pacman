@@ -69,6 +69,8 @@ const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 
 function initialize() {
+  counter = 0;
+
   ghost = { x: 128, y: 112, vx: 0, vy: 0 };
 
   dots = [];
