@@ -274,6 +274,16 @@ function think() {
       pacman.power -= 1;
     }
   });
+  if (ghost.intent) {
+    const box = convertSpriteToBox(ghost);
+    box[0] += ghost.intent.vx * 6;
+    box[1] += ghost.intent.vy * 6;
+    if (!walls.some(wall => collides(wall, box))) {
+      ghost.vx = ghost.intent.vx;
+      ghost.vy = ghost.intent.vy;
+      delete ghost.intent;
+    }
+  }
 }
 
 function spawn() {
@@ -382,23 +392,19 @@ function keyDownHandler(event) {
 }
 
 function moveUp() {
-  ghost.vy = -1;
-  ghost.vx = 0;
+  ghost.intent = { vx: 0, vy: -1 };
 }
 
 function moveLeft() {
-  ghost.vy = 0;
-  ghost.vx = -1;	
+  ghost.intent = { vx: -1, vy: 0 };
 }
 
 function moveDown() {
-  ghost.vy = 1;
-  ghost.vx = 0;	
+  ghost.intent = { vx: 0, vy: 1 };
 }
 
 function moveRight() {
-  ghost.vy = 0;
-  ghost.vx = 1;	
+  ghost.intent = { vx: 1, vy: 0 };
 }
 
 
