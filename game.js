@@ -361,34 +361,46 @@ function nextLoop() {
 initialize();
 nextLoop();
 
-function keyDownHandler(event) {
-  if (event.keyCode == 38) {
-    ghost.vy = -1;
-    ghost.vx = 0;
-    event.preventDefault();
-	}
-	else if (event.keyCode == 39) {	
-		ghost.vy = 0;
-    ghost.vx = 1;	
-    event.preventDefault();
-	}
-	else if (event.keyCode == 40) {	
-		ghost.vy = 1;
-    ghost.vx = 0;	
-    event.preventDefault();
-	}
-	else if (event.keyCode == 37) {	
-		ghost.vy = 0;
-    ghost.vx = -1;	
-    event.preventDefault();
-	}
+const mapMoveFromKeyCode = {
+  37: moveLeft,
+  38: moveUp,
+  39: moveRight,
+  40: moveDown,
+}
 
-  if (ghost.eaten && [13, 32].includes(event.keyCode)) {
+function keyDownHandler(event) {
+  if (mapMoveFromKeyCode[event.keyCode]) {
+    mapMoveFromKeyCode[event.keyCode]();
+    event.preventDefault();
+  }
+  else if (ghost.eaten && [13, 32].includes(event.keyCode)) {
+    event.preventDefault();
     level = 1;
     wallet = 0;
     initialize();
   }
 }
+
+function moveUp() {
+  ghost.vy = -1;
+  ghost.vx = 0;
+}
+
+function moveLeft() {
+  ghost.vy = 0;
+  ghost.vx = -1;	
+}
+
+function moveDown() {
+  ghost.vy = 1;
+  ghost.vx = 0;	
+}
+
+function moveRight() {
+  ghost.vy = 0;
+  ghost.vx = 1;	
+}
+
 
 canvas.addEventListener('click', event => {
   const x = Math.floor((event.offsetX) / 600 * 256);
