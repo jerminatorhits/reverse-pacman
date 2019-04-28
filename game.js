@@ -242,8 +242,8 @@ function collisions() {
   // Stop at walls
   [ ...pacmans, ghost ].forEach(entity => {
     const box = convertSpriteToBox(entity);
-    box[0] += entity.vx * 3;
-    box[1] += entity.vy * 3;
+    box[0] += entity.vx * 2;
+    box[1] += entity.vy * 2;
     if (walls.some(wall => collides(wall, box))) {
       entity.vx = 0;
       entity.vy = 0;
@@ -276,8 +276,8 @@ function think() {
   });
   if (ghost.intent) {
     const box = convertSpriteToBox(ghost);
-    box[0] += ghost.intent.vx * 6;
-    box[1] += ghost.intent.vy * 6;
+    box[0] += ghost.intent.vx * 3;
+    box[1] += ghost.intent.vy * 3;
     if (!walls.some(wall => collides(wall, box))) {
       ghost.vx = ghost.intent.vx;
       ghost.vy = ghost.intent.vy;
