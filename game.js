@@ -356,7 +356,7 @@ function nextLoop() {
   requestAnimationFrame(timestamp => {
     if (!lastTime) lastTime = timestamp;
     const delta = timestamp - lastTime;
-    const frames = Math.floor(120 * delta / 1000);
+    const frames = Math.min(Math.floor(120 * delta / 1000), 60);
     if (frames > 0) {
       lastTime = timestamp;
     }
