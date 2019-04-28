@@ -288,8 +288,13 @@ function think() {
 
 function spawn() {
   if (counter % 600 === 0 && pacmans.length < 256) {
-    pacmans.push({ x: 0, y: 114, vx: -1, vy: 0, power: 600 });
-    pacmans.push({ x: 0, y: 114, vx: 1, vy: 0, power: 600 });
+    if (Math.random() > 0.5) {
+      const vx = Math.random() > 0.5 ? -1 : 1;
+      pacmans.push({ x: 0, y: 114, vx, vy: 0, power: 600 });
+      pacmans.push({ x: 0, y: 114, vx: -vx, vy: 0, power: Math.random() > 0.5 ? 600 : 0 });
+    } else {
+      pacmans.push({ x: 0, y: 114, vx: Math.random() > 0.5 ? -1 : 1, vy: 0, power: Math.random() > 0.5 ? 600 : 0 });
+    }
   }
 }
 
