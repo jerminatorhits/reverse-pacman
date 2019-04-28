@@ -377,10 +377,11 @@ function drawTitle(context) {
   const ghost = { x: gx, y: gy + Math.sin(counter / 10) * 2 };
   const px = counter < 380 ? gx + 32 : gx - 32;
   const py = gy;
-  const pacman = { x: counter < 380 ? px : Math.min(px, 96), y: py, vx: Math.sign(gx - px), vy: 0, power: true };
+  const movingPacman = { x: counter < 380 ? px : Math.min(px, 96), y: py, vx: Math.sign(gx - px), vy: 0, power: true };
   const mouthRadius = (counter < 380 || px < 96) ? ((Math.sin(Date.now() / 100) + 1) / 2) * 4 : 4; // chomp chomp
   const ex = (gx > 160) ? 1 : (gx < 100) ? -1 : 0;
   const ey = gy < 128 ? -1 : 0;
+  let souls = 3;
   
   if (gy < 128 || gx < 128) {
     context.fillStyle = "#FF0";
@@ -413,6 +414,7 @@ function drawTitle(context) {
     context.lineTo(132, 132);
     context.lineTo(124, 136);
     context.fill();
+    souls--;
   }
   [-11, 13].filter(cx => gy < 128 || gx < 128 + cx).forEach((cx, i) => {
     const wiggle = Math.floor((counter / (i ? 60 : 44))) % 3 > 1 ? Math.abs(Math.sin(counter / (i ? 25 : 18))) : 0;
@@ -420,45 +422,52 @@ function drawTitle(context) {
     context.beginPath();
     context.arc(128 + cx, 143 - wiggle, 3, 0, Math.PI * 2);
     context.fill();    
+    souls--;
   });
   
-  context.fillStyle = pacman.power ? "#F80" : "#FF0";
-  context.beginPath();
-  context.arc(pacman.x, pacman.y, 6, 0, Math.PI * 2);
-  context.lineTo(pacman.x, pacman.y);
-  context.fill();
-  context.fillStyle = "#000";
-  context.beginPath();
-  if (pacman.static) {
-    context.arc(pacman.x, pacman.y, 4, 0, Math.PI);
-  }
-  else {
-    if (pacman.power) {
-      context.arc(pacman.x + pacman.vx, pacman.y + mouthRadius, mouthRadius, Math.PI, 0);
-    } else {
-      context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
+  const menuPacman = { x: 16, y: 240, vx: 0, vy: 0, static: true };
+  context.fillStyle = "#FFF";
+  context.fillText(`${souls}`, 26, 244);
+  
+  [movingPacman, menuPacman].forEach(pacman => {
+    context.fillStyle = pacman.power ? "#F80" : "#FF0";
+    context.beginPath();
+    context.arc(pacman.x, pacman.y, 6, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#000";
+    context.beginPath();
+    if (pacman.static) {
+      context.arc(pacman.x, pacman.y, 4, 0, Math.PI);
     }
-  }
-  context.fill();
-  context.fillStyle = "#FFF";
-  context.beginPath();
-  context.arc(pacman.x + 2, pacman.y - 2, 2, 0, Math.PI * 2);
-  context.lineTo(pacman.x, pacman.y);
-  context.fill();
-  context.fillStyle = "#FFF";
-  context.beginPath();
-  context.arc(pacman.x - 2, pacman.y - 2, 2, 0, Math.PI * 2);
-  context.lineTo(pacman.x, pacman.y);
-  context.fill();
-  context.fillStyle = pacman.power ? "#F00" : "#0F0";
-  context.beginPath();
-  context.arc(pacman.x - 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
-  context.lineTo(pacman.x, pacman.y);
-  context.fill();
-  context.beginPath();
-  context.arc(pacman.x + 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
-  context.lineTo(pacman.x, pacman.y);
-  context.fill();
+    else {
+      if (pacman.power) {
+        context.arc(pacman.x + pacman.vx, pacman.y + mouthRadius, mouthRadius, Math.PI, 0);
+      } else {
+        context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
+      }
+    }
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(pacman.x + 2, pacman.y - 2, 2, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(pacman.x - 2, pacman.y - 2, 2, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = pacman.power ? "#F00" : "#0F0";
+    context.beginPath();
+    context.arc(pacman.x - 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.beginPath();
+    context.arc(pacman.x + 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+  });
 
   context.fillStyle = "#666";
   context.beginPath();
