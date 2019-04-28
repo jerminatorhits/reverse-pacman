@@ -541,7 +541,7 @@ function keyDownHandler(event) {
     mapMoveFromKeyCode[event.keyCode]();
     event.preventDefault();
   }
-  else if (ghost.eaten && [13, 32].includes(event.keyCode)) {
+  else if ((ghost.eaten || level === 0) && [13, 32].includes(event.keyCode)) {
     event.preventDefault();
     level = 1;
     wallet = 0;
