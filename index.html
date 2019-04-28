@@ -14,10 +14,12 @@
         -ms-touch-action: manipulation;
       }
       body {
+        background-color: #262626;
+        height: 100vh;
         margin: 0;
       }
       button {
-        width: 33%;
+        width: 33.33%;
         height: 80px;
         background-color: gray;
         border: 1px solid darkblue;
@@ -27,6 +29,14 @@
       button:active {
         background-color: #272727;
       }
+      #game-container {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        align-items: center;
+        margin: 0 auto;
+      }
       #game {
         width: 100vmin;
         height: 100vmin;
@@ -35,6 +45,7 @@
       #controls-container {
         display: flex;
         flex-direction: column;
+        width: 100vmin;
       }
       .controls-row {
         display: flex;
@@ -46,24 +57,28 @@
   </head>
 
   <body>
-    <canvas width="256" height="256" id="game"></canvas>
-    <div id="controls-container">
-      <div class="controls-row">
-        <button id="up" onclick="moveUp()">
-          <i class="fas fa-arrow-up fa-3x"></i>
-        </button>
+    <div id="game-container">
+      <canvas width="256" height="256" id="game"></canvas>
+      <div style="flex-grow: 2"></div>
+      <div id="controls-container">
+        <div class="controls-row">
+          <button id="up" onclick="moveUp()">
+            <i class="fas fa-arrow-up fa-3x"></i>
+          </button>
+        </div>
+        <div class="controls-row">
+          <button id="left" onclick="moveLeft()">
+            <i class="fas fa-arrow-left fa-3x"></i>
+          </button>
+          <button id="down" onclick="moveDown()">
+            <i class="fas fa-arrow-down fa-3x"></i>
+          </button>
+          <button id="right" onclick="moveRight()">
+            <i class="fas fa-arrow-right fa-3x"></i>
+          </button>
+        </div>
       </div>
-      <div class="controls-row">
-        <button id="left" onclick="moveLeft()">
-          <i class="fas fa-arrow-left fa-3x"></i>
-        </button>
-        <button id="down" onclick="moveDown()">
-          <i class="fas fa-arrow-down fa-3x"></i>
-        </button>
-        <button id="right" onclick="moveRight()">
-          <i class="fas fa-arrow-right fa-3x"></i>
-        </button>
-      </div>
+      <div style="flex-grow: 1"></div>
     </div>
     <script type='application/javascript' src='fastclick.js'></script>
     <script src="game.js"></script>
