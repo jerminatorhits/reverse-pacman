@@ -9,6 +9,10 @@
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <style>
+      html {
+        touch-action: manipulation;
+        -ms-touch-action: manipulation;
+      }
       body {
         margin: 0;
       }
@@ -19,7 +23,6 @@
         border: 1px solid darkblue;
         border-radius: 5px;
         outline: none;
-        touch-action: manipulation;
       }
       button:active {
         background-color: #272727;
@@ -46,18 +49,18 @@
     <canvas width="256" height="256" id="game"></canvas>
     <div id="controls-container">
       <div class="controls-row">
-        <button id="up" ontouchend="moveUp()">
+        <button id="up" onclick="moveUp()" ontouchend="moveUp()">
           <i class="fas fa-arrow-up fa-3x"></i>
         </button>
       </div>
       <div class="controls-row">
-        <button id="left" ontouchend="moveLeft()">
+        <button id="left" onclick="moveLeft()" ontouchend="moveLeft()">
           <i class="fas fa-arrow-left fa-3x"></i>
         </button>
-        <button id="down" ontouchend="moveDown()">
+        <button id="down" onclick="moveDown()" ontouchend="moveDown()">
           <i class="fas fa-arrow-down fa-3x"></i>
         </button>
-        <button id="right" ontouchend="moveRight()">
+        <button id="right" onclick="moveRight()" ontouchend="moveRight()">
           <i class="fas fa-arrow-right fa-3x"></i>
         </button>
       </div>
