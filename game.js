@@ -543,7 +543,7 @@ function keyDownHandler(event) {
   }
   else if ((ghost.eaten || level === 0) && [13, 32].includes(event.keyCode)) {
     event.preventDefault();
-    level = 1;
+    level = level === 0 ? 1 : 0;
     wallet = 0;
     initialize();
   }
