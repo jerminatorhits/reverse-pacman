@@ -247,8 +247,8 @@ function collisions() {
   // Stop at walls
   [ ...pacmans, ghost ].forEach(entity => {
     const box = convertSpriteToBox(entity);
-    box[0] += entity.vx * 3;
-    box[1] += entity.vy * 3;
+    box[0] += entity.vx * 2;
+    box[1] += entity.vy * 2;
     if (walls.some(wall => collides(wall, box))) {
       entity.vx = 0;
       entity.vy = 0;
@@ -281,8 +281,8 @@ function think() {
   });
   if (ghost.intent) {
     const box = convertSpriteToBox(ghost);
-    box[0] += ghost.intent.vx * 6;
-    box[1] += ghost.intent.vy * 6;
+    box[0] += ghost.intent.vx * 3;
+    box[1] += ghost.intent.vy * 3;
     if (!walls.some(wall => collides(wall, box))) {
       ghost.vx = ghost.intent.vx;
       ghost.vy = ghost.intent.vy;
@@ -292,7 +292,7 @@ function think() {
 }
 
 function spawn() {
-  if (counter % 600 === 0) {
+  if (counter % 600 === 0 && pacmans.length < 256) {
     pacmans.push({ x: 0, y: 114, vx: -1, vy: 0, power: 600 });
     pacmans.push({ x: 0, y: 114, vx: 1, vy: 0, power: 600 });
   }
@@ -318,7 +318,8 @@ function consume() {
   });
   pellets = pellets.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
   // eats pacmen on ghost collision
-  chompBoxes.forEach((chompBox, index) => {
+  for (let index = chompBoxes.length - 1; index >= 0; index -= 1) {
+    const chompBox = chompBoxes[index];
     const ghostBox = convertSpriteToBox(ghost);
     if (collides(chompBox, ghostBox)) {
       if (pacmans[index].power || ghost.eaten) {
@@ -328,7 +329,7 @@ function consume() {
         wallet++;
       }
     }
-  });
+  }
   ghost.eaten = ghost.eaten || !dots.length;
 }
 
@@ -361,7 +362,7 @@ function nextLoop() {
   requestAnimationFrame(timestamp => {
     if (!lastTime) lastTime = timestamp;
     const delta = timestamp - lastTime;
-    const frames = Math.floor(120 * delta / 1000);
+    const frames = Math.min(Math.floor(120 * delta / 1000), 60);
     if (frames > 0) {
       lastTime = timestamp;
     }
