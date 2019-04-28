@@ -379,6 +379,48 @@ function drawTitle(context) {
   const py = gy;
   const pacman = { x: counter < 380 ? px : Math.min(px, 96), y: py, vx: Math.sign(gx - px), vy: 0, power: true };
   const mouthRadius = (counter < 380 || px < 96) ? ((Math.sin(Date.now() / 100) + 1) / 2) * 4 : 4; // chomp chomp
+  const ex = (gx > 160) ? 1 : (gx < 100) ? -1 : 0;
+  const ey = gy < 128 ? -1 : 0;
+  
+  if (gy < 128 || gx < 128) {
+    context.fillStyle = "#FF0";
+    context.beginPath();
+    context.arc(128, 140, 6, 0, Math.PI * 2);
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(128 - 2, 140 - 1, 2, 0, Math.PI * 2);
+    context.fill();
+    context.beginPath();
+    context.arc(128 + 2, 140 - 1, 2, 0, Math.PI * 2);
+    context.fill();
+    context.fillStyle = "#F0F";
+    context.beginPath();
+    context.arc(128 - 2 + ex, 140 - 1 + ey, 1, 0, Math.PI * 2);
+    context.fill();
+    context.beginPath();
+    context.arc(128 + 2 + ex, 140 - 1 + ey, 1, 0, Math.PI * 2);
+    context.fill();
+    context.beginPath();
+    context.arc(128, 142, 2, 0, Math.PI);
+    context.fill();
+    context.beginPath();
+    context.arc(128, 134, 1.5, 0, Math.PI * 2);
+    context.fill();
+    context.beginPath();
+    context.moveTo(124, 132);
+    context.lineTo(132, 136);
+    context.lineTo(132, 132);
+    context.lineTo(124, 136);
+    context.fill();
+  }
+  [-11, 13].filter(cx => gy < 128 || gx < 128 + cx).forEach((cx, i) => {
+    const wiggle = Math.floor((counter / (i ? 60 : 44))) % 3 > 1 ? Math.abs(Math.sin(counter / (i ? 25 : 18))) : 0;
+    context.fillStyle = "#FF0";
+    context.beginPath();
+    context.arc(128 + cx, 143 - wiggle, 3, 0, Math.PI * 2);
+    context.fill();    
+  });
   
   context.fillStyle = pacman.power ? "#F80" : "#FF0";
   context.beginPath();
