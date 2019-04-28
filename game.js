@@ -53,12 +53,13 @@ const walls = [
   [ 32, 200, 82, 10 ],
 
   // ghost box (boo!)
-  [ 96, 104, 12, 18 ]
+  [ 88, 96, 18, 34 ]
 ];
 
 walls.slice().forEach(wall => {
   walls.push([ 258 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
 });
+walls.forEach(wall => (wall[0]--));
 
 let dots, pellets, pacmans, ghost;
 
@@ -76,10 +77,10 @@ function initialize() {
   dots = [];
   const noDotZones = [
     [ 16, 80, 42, 64 ],
-    [ 206, 80, 42, 64 ],
+    [ 204, 80, 42, 64 ],
     [ 76, 80, 104, 64 ]
   ];
-  for (let x = 19; x < 230; x += 8) {
+  for (let x = 18; x < 230; x += 8) {
     for (let y = 27; y < 220; y += 8) {
       const box = [ x, y, 12, 12 ];
       if (!noDotZones.some(zone => collides(box, zone))) {
