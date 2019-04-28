@@ -287,7 +287,7 @@ function think() {
 }
 
 function spawn() {
-  if (counter % 600 === 0) {
+  if (counter % 600 === 0 && pacmans.length < 256) {
     pacmans.push({ x: 0, y: 114, vx: -1, vy: 0, power: 600 });
     pacmans.push({ x: 0, y: 114, vx: 1, vy: 0, power: 600 });
   }
