@@ -530,6 +530,8 @@ initialize();
 nextLoop();
 
 const mapMoveFromKeyCode = {
+  13: nextGame,
+  32: nextGame,
   37: moveLeft,
   38: moveUp,
   39: moveRight,
@@ -541,8 +543,10 @@ function keyDownHandler(event) {
     mapMoveFromKeyCode[event.keyCode]();
     event.preventDefault();
   }
-  else if ((ghost.eaten || level === 0) && [13, 32].includes(event.keyCode)) {
-    event.preventDefault();
+}
+
+function nextGame() {
+  if (ghost.eaten || level === 0) {
     level = level === 0 ? 1 : 0;
     wallet = 0;
     initialize();
