@@ -38,7 +38,7 @@ const walls = [
 
   // Lower T
   [ 96, 176, 32.5, 10 ],
-  [ 128, 183, 1, 25 ],
+  [ 128, 183, 1, 27 ],
 
   // Lower single walls
   [ 72, 120, 2, 26 ],
@@ -53,7 +53,7 @@ const walls = [
   [ 32, 200, 82, 10 ],
 
   // ghost box (boo!)
-  [ 88, 96, 18, 34 ]
+  [ 88, 96, 18, 34 ],
 ];
 
 walls.slice().forEach(wall => {
