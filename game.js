@@ -313,7 +313,8 @@ function consume() {
   });
   pellets = pellets.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
   // eats pacmen on ghost collision
-  chompBoxes.forEach((chompBox, index) => {
+  for (let index = chompBoxes.length - 1; index >= 0; index -= 1) {
+    const chompBox = chompBoxes[index];
     const ghostBox = convertSpriteToBox(ghost);
     if (collides(chompBox, ghostBox)) {
       if (pacmans[index].power || ghost.eaten) {
@@ -323,7 +324,7 @@ function consume() {
         wallet++;
       }
     }
-  });
+  }
   ghost.eaten = ghost.eaten || !dots.length;
 }
 
