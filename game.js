@@ -69,7 +69,7 @@ walls.forEach(wall => (wall[0]--));
 let dots, pellets, pacmans, ghost;
 
 let wallet = 0;
-let level = 1;
+let level = 0;
 
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
@@ -362,6 +362,94 @@ function run() {
   //draw(context);
 }
 
+
+function runTitle() {
+  counter += 1;
+}
+
+function drawTitle(context) {
+  // Clear the screen
+  context.fillStyle = "#000";
+  context.fillRect(0, 0, 256, 256);
+
+  const gx = counter < 380 ? (320 - counter) : (counter - 380 - 120);
+  const gy = counter < 380 ? 112 : 140;
+  const ghost = { x: gx, y: gy + Math.sin(counter / 10) * 2 };
+  const px = counter < 380 ? gx + 32 : gx - 32;
+  const py = gy;
+  const pacman = { x: counter < 380 ? px : Math.min(px, 96), y: py, vx: Math.sign(gx - px), vy: 0, power: true };
+  const mouthRadius = (counter < 380 || px < 96) ? ((Math.sin(Date.now() / 100) + 1) / 2) * 4 : 4; // chomp chomp
+  
+  context.fillStyle = pacman.power ? "#F80" : "#FF0";
+  context.beginPath();
+  context.arc(pacman.x, pacman.y, 6, 0, Math.PI * 2);
+  context.lineTo(pacman.x, pacman.y);
+  context.fill();
+  context.fillStyle = "#000";
+  context.beginPath();
+  if (pacman.static) {
+    context.arc(pacman.x, pacman.y, 4, 0, Math.PI);
+  }
+  else {
+    if (pacman.power) {
+      context.arc(pacman.x + pacman.vx, pacman.y + mouthRadius, mouthRadius, Math.PI, 0);
+    } else {
+      context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
+    }
+  }
+  context.fill();
+  context.fillStyle = "#FFF";
+  context.beginPath();
+  context.arc(pacman.x + 2, pacman.y - 2, 2, 0, Math.PI * 2);
+  context.lineTo(pacman.x, pacman.y);
+  context.fill();
+  context.fillStyle = "#FFF";
+  context.beginPath();
+  context.arc(pacman.x - 2, pacman.y - 2, 2, 0, Math.PI * 2);
+  context.lineTo(pacman.x, pacman.y);
+  context.fill();
+  context.fillStyle = pacman.power ? "#F00" : "#0F0";
+  context.beginPath();
+  context.arc(pacman.x - 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
+  context.lineTo(pacman.x, pacman.y);
+  context.fill();
+  context.beginPath();
+  context.arc(pacman.x + 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
+  context.lineTo(pacman.x, pacman.y);
+  context.fill();
+
+  context.fillStyle = "#666";
+  context.beginPath();
+  context.arc(ghost.x, ghost.y, 6, Math.PI, Math.PI * 2);
+  context.lineTo(ghost.x + 6, ghost.y + 6);
+  context.lineTo(ghost.x + 4, ghost.y + 4);
+  context.lineTo(ghost.x + 2, ghost.y + 6);
+  context.lineTo(ghost.x , ghost.y + 4);
+  context.lineTo(ghost.x - 2, ghost.y + 6);
+  context.lineTo(ghost.x - 4, ghost.y + 4);
+  context.lineTo(ghost.x - 6, ghost.y + 6);
+  context.fill();   
+  context.fillStyle = "#BBB";
+  context.beginPath();
+  context.arc(ghost.x, ghost.y, 4, Math.PI, Math.PI * 2);
+  context.lineTo(ghost.x + 3, ghost.y + 2);
+  context.lineTo(ghost.x + 2, ghost.y + 4);
+  context.lineTo(ghost.x , ghost.y + 2);
+  context.lineTo(ghost.x - 2, ghost.y + 4);
+  context.lineTo(ghost.x - 3, ghost.y + 2);
+  context.fill();
+  context.fillStyle = "#000";
+  context.beginPath();
+  context.arc(ghost.x + 2, ghost.y - 1, 1, 0, Math.PI * 2);
+  context.lineTo(ghost.x, ghost.y);
+  context.fill();
+  context.fillStyle = "#000";
+  context.beginPath();
+  context.arc(ghost.x - 2, ghost.y - 1, 1, 0, Math.PI * 2);
+  context.lineTo(ghost.x, ghost.y);
+  context.fill();
+}
+
 let lastTime;
 function nextLoop() {
   requestAnimationFrame(timestamp => {
@@ -372,9 +460,9 @@ function nextLoop() {
       lastTime = timestamp;
     }
     for (let i = 0; i < frames; i += 1) {
-      run();
+      (level > 0 ? run : runTitle)();
     }
-    draw(context);
+    (level > 0 ? draw : drawTitle)(context);
     nextLoop();
   });
 }
