@@ -18,9 +18,9 @@
         height: 100vh;
         margin: 0;
       }
-      button {
+      .arrow-button {
         width: 33.33%;
-        height: 80px;
+        height: 100%;
         background-color: gray;
         border: 1px solid darkblue;
         border-radius: 5px;
@@ -31,26 +31,56 @@
       }
       #game-container {
         align-items: center;
+        justify-content: center;
         display: flex;
         flex-direction: column;
-        height: 100%;
-        align-items: center;
         margin: 0 auto;
+        flex-shrink: 0;
       }
       #game {
+        /* flex-shrink: 0; */
         width: 100vmin;
         height: 100vmin;
         image-rendering: pixelated;
       }
       #controls-container {
+        justify-content: center;
+        display: flex;
+        /* height: 50vh; */
+        /* padding: 14px 0; */
+        /* width: 50vh; */
+
+        height: 120px;
+        width: 120px;
+      }
+      #control-pad {
+        align-items: center;
         display: flex;
         flex-direction: column;
-        width: 100vmin;
+        height: 100%;
+        width: 100%;
       }
       .controls-row {
         display: flex;
         flex-direction: row;
+        height: 100%;
+        width: 100%;
         justify-content: center;
+      }
+      .middle-key-spacer {
+        width: 33.33%;
+        height: 100%;
+      }
+
+      @media only screen and (orientation: landscape) {
+        #game-container {
+          align-items: center;
+          justify-content: center;
+          display: flex;
+          flex-direction: row;
+          margin: 0 auto;
+          flex-shrink: 0;
+        }
       }
 
   </style>
@@ -59,26 +89,30 @@
   <body>
     <div id="game-container">
       <canvas width="256" height="256" id="game"></canvas>
-      <div style="flex-grow: 2"></div>
       <div id="controls-container">
-        <div class="controls-row">
-          <button id="up" onclick="moveUp()">
-            <i class="fas fa-arrow-up fa-3x"></i>
-          </button>
-        </div>
-        <div class="controls-row">
-          <button id="left" onclick="moveLeft()">
-            <i class="fas fa-arrow-left fa-3x"></i>
-          </button>
-          <button id="down" onclick="moveDown()">
-            <i class="fas fa-arrow-down fa-3x"></i>
-          </button>
-          <button id="right" onclick="moveRight()">
-            <i class="fas fa-arrow-right fa-3x"></i>
-          </button>
+        <div id="control-pad">
+          <div class="controls-row">
+            <button id="up" class="arrow-button" onclick="moveUp()">
+              <i class="fas fa-arrow-up fa-2x"></i>
+            </button>
+          </div>
+          <div class="controls-row">
+            <button id="left" class="arrow-button" onclick="moveLeft()">
+              <i class="fas fa-arrow-left fa-2x"></i>
+            </button>
+            <div class="middle-key-spacer" onclick="moveRight()">
+            </div>
+            <button id="right" class="arrow-button" onclick="moveRight()">
+              <i class="fas fa-arrow-right fa-2x"></i>
+            </button>
+          </div>
+          <div class="controls-row">
+            <button id="down" class="arrow-button" onclick="moveDown()">
+              <i class="fas fa-arrow-down fa-2x"></i>
+            </button>
+          </div>
         </div>
       </div>
-      <div style="flex-grow: 1"></div>
     </div>
     <script type='application/javascript' src='fastclick.js'></script>
     <script src="game.js"></script>
