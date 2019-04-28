@@ -428,6 +428,14 @@ function drawTitle(context) {
   const menuPacman = { x: 16, y: 240, vx: 0, vy: 0, static: true };
   context.fillStyle = "#FFF";
   context.fillText(`${souls}`, 26, 244);
+  if (counter > 900) {
+    context.fillText('SOUL TOLL', 102, 64);
+  }
+  if (counter > 1000) {
+    context.fillStyle = "#BBB";
+    context.fillText('a video game', 99, 80);
+  }
+
   
   [movingPacman, menuPacman].forEach(pacman => {
     context.fillStyle = pacman.power ? "#F80" : "#FF0";
