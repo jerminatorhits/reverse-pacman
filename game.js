@@ -2,6 +2,11 @@ console.log('hello from game.js');
 
 document.addEventListener("keydown",keyDownHandler, false);
 
+// initializes fastclick
+document.addEventListener('DOMContentLoaded', function() {
+  FastClick.attach(document.body);
+}, false);
+
 const walls = [
   [ 18, 24, 110.5, 2 ],
   [ 16, 24, 2, 56 ],
