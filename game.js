@@ -53,11 +53,10 @@ function createEffect(type, shape) {
 }
 const sfx = {};
 function createEffects() {
-  audio = audio || new AudioContext();
-  console.log('audio:', audio);
-  muteGain = audio.createGain();
-  muteGain.connect(audio.destination);
-  muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
+  // audio = audio || new AudioContext();
+  // muteGain = audio.createGain();
+  // muteGain.connect(audio.destination);
+  // muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
   sfx.chomp = createEffect('triangle', [
     { freq: 110, gain: 0, time: 0 },
     { freq: 220, gain: 0.25, time: 0.125 },
