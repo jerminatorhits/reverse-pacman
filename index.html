@@ -13,67 +13,11 @@
         -ms-touch-action: manipulation;
       }
       body {
-        background-color: #262626;
-        height: 100vh;
         margin: 0;
       }
-
-      #game-container {
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        flex-direction: column;
-        margin: 0 auto;
-        flex-shrink: 0;
-      }
-      #game {
-        width: 100vmin;
-        height: 100vmin;
-        image-rendering: pixelated;
-      }
-      #canvas-container {
-        position: relative;
-      }
-      #menu-bar {
-        display: flex;
-        padding: 2vmin;
-        position: absolute;
-        right: 0;
-        top: 0;
-      }
-      #menu-bar div:not(:first-child) {
-        margin-left: 2vmin;
-      }
-
-      #controls-container {
-        display: flex;
-        height: calc(100vh - 100vmin);
-        justify-content: center;
-        width: 100vmin;
-        max-height: 50vmin;
-      }
-      #control-pad {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        width: 100%;
-        min-height: 96px;
-      }
-      .controls-row {
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-        width: 100%;
-        justify-content: center;
-      }
-      .middle-key-spacer {
-        width: 33.33%;
-        height: 100%;
-      }
-      .arrow-button {
-        width: 33.33%;
-        height: 100%;
+      button {
+        width: 33%;
+        height: 80px;
         background-color: gray;
         border: 1px solid darkblue;
         border-radius: 5px;
@@ -82,71 +26,42 @@
       button:active {
         background-color: #272727;
       }
-
-      .fas {
-        font-size: 5vmin;
+      #game {
+        width: 100vmin;
+        height: 100vmin;
+        image-rendering: pixelated;
       }
-      #gamepad-icon, #music-icon {
-        color: blue;
+      #controls-container {
+        display: flex;
+        flex-direction: column;
       }
-
-      @media only screen and (orientation: landscape) {
-        #game-container {
-          align-items: center;
-          justify-content: center;
-          display: flex;
-          flex-direction: row;
-          margin: 0 auto;
-          flex-shrink: 0;
-        }
-        #controls-container {
-          display: flex;
-          height: 100vmin;
-          justify-content: center;
-          width: calc(100vw - 100vmin);
-          max-height: 50vmin;
-        }
+      .controls-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
       }
 
   </style>
   </head>
 
   <body>
-    <div id="game-container">
-      <div id="canvas-container">
-        <canvas width="256" height="256" onclick="nextGame()" id="game"></canvas>
-        <div id="menu-bar">
-          <div id="music-icon">
-            <i class="fas fa-music" onclick="toggleSound()"></i>
-          </div>
-          <div id="gamepad-icon">
-            <i class="fas fa-gamepad" onclick="toggleKeyboard()"></i>
-          </div>
-        </div>
+    <canvas width="256" height="256" onclick="nextGame()" id="game"></canvas>
+    <div id="controls-container">
+      <div class="controls-row">
+        <button id="up" onclick="moveUp()"">
+          <i class="fas fa-arrow-up fa-3x"></i>
+        </button>
       </div>
-      <div id="controls-container">
-        <div id="control-pad">
-          <div class="controls-row">
-            <button id="up" class="arrow-button" onclick="moveUp()">
-              <i class="fas fa-arrow-up fa-2x"></i>
-            </button>
-          </div>
-          <div class="controls-row">
-            <button id="left" class="arrow-button" onclick="moveLeft()">
-              <i class="fas fa-arrow-left fa-2x"></i>
-            </button>
-            <div class="middle-key-spacer" onclick="moveRight()">
-            </div>
-            <button id="right" class="arrow-button" onclick="moveRight()">
-              <i class="fas fa-arrow-right fa-2x"></i>
-            </button>
-          </div>
-          <div class="controls-row">
-            <button id="down" class="arrow-button" onclick="moveDown()">
-              <i class="fas fa-arrow-down fa-2x"></i>
-            </button>
-          </div>
-        </div>
+      <div class="controls-row">
+        <button id="left" onclick="moveLeft()">
+          <i class="fas fa-arrow-left fa-3x"></i>
+        </button>
+        <button id="down" onclick="moveDown()">
+          <i class="fas fa-arrow-down fa-3x"></i>
+        </button>
+        <button id="right" onclick="moveRight()">
+          <i class="fas fa-arrow-right fa-3x"></i>
+        </button>
       </div>
     </div>
     <script type='application/javascript' src='fastclick.js'></script>
