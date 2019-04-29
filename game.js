@@ -1,11 +1,24 @@
 console.log('hello from game.js');
 
-document.addEventListener("keydown",keyDownHandler, false);
+document.addEventListener('keydown',keyDownHandler, false);
 
 // initializes fastclick
 document.addEventListener('DOMContentLoaded', function() {
   FastClick.attach(document.body);
 }, false);
+
+function toggleKeyboard() {
+  const controlsContainer = document.getElementById('controls-container');
+  const gamepadIcon = document.getElementById('gamepad-icon');
+  if (controlsContainer.style.display !== 'none') {
+    controlsContainer.style.display = 'none';
+    gamepadIcon.style.color = '#262626';
+  }
+  else {
+    controlsContainer.style.display = 'inline';
+    gamepadIcon.style.color = 'blue';
+  }
+}
 
 let audio;
 function createEffect(type, shape) {
