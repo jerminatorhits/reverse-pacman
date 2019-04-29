@@ -20,15 +20,28 @@ function toggleKeyboard() {
   }
 }
 
-let audio;
+function toggleSound() {
+  const soundIcon = document.getElementById('music-icon');
+  if (muted) {
+    muted = false;
+    soundIcon.style.color = 'blue';
+  } else {
+    muted = true;
+    soundIcon.style.color = '#262626';
+  }
+  if (muteGain && audio) {
+    muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
+  }
+}
+
+let audio, muted, muteGain;
 function createEffect(type, shape) {
-  audio = audio || new AudioContext();
   const osc = audio.createOscillator();
   const gain = audio.createGain();
   gain.gain.value = 0;
   osc.connect(gain);
   osc.type = type;
-  gain.connect(audio.destination);
+  gain.connect(muteGain);
   osc.start();
   return () => {
     shape.forEach(part => {
@@ -38,13 +51,55 @@ function createEffect(type, shape) {
     });
   };
 }
-let chomp;
+const sfx = {};
 function createEffects() {
-  chomp = createEffect('triangle', [
+  audio = audio || new AudioContext();
+  muteGain = audio.createGain();
+  muteGain.connect(audio.destination);
+  muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
+  sfx.chomp = createEffect('triangle', [
     { freq: 110, gain: 0, time: 0 },
     { freq: 220, gain: 0.25, time: 0.125 },
     { freq: 110, gain: 0, time: 0.25 }
-  ]);  
+  ]);
+  sfx.powerup = createEffect('sine', [
+    { freq: 220*2, gain: 0, time: 0 },
+    { freq: 440*2, gain: 0.25, time: 0.125/2 },
+    { freq: 660*2, gain: 0.33, time: 0.25/2 },
+    { freq: 550*2, gain: 0.33, time: 0.375/2 },
+    { freq: 880*2, gain: 0.25, time: 0.5/2 },
+    { freq: 660*2, gain: 0.33, time: 0.625/2 },
+    { freq: 1320*2, gain: 0.33, time: 0.75/2 },
+    { freq: 220*2, gain: 0, time: 1/2 }
+  ]);
+  sfx.powerdown = createEffect('sine', [
+    { freq: 220*2, gain: 0, time: 0 },
+    { freq: 1320*2, gain: 0.25, time: 0.125/2 },
+    { freq: 660*2, gain: 0.33, time: 0.25/2 },
+    { freq: 880*2, gain: 0.33, time: 0.375/2 },
+    { freq: 550*2, gain: 0.25, time: 0.5/2 },
+    { freq: 660*2, gain: 0.33, time: 0.625/2 },
+    { freq: 440*2, gain: 0.33, time: 0.75/2 },
+    { freq: 220*2, gain: 0, time: 1/2 }
+  ]);
+  sfx.life = createEffect('sawtooth', [
+    { freq: 220, gain: 0, time: 0 },
+    { freq: 1320, gain: 0.2, time: 0.125 },
+    { freq: 1320 * 3, gain: 0.2, time: 0.175 },
+    { freq: 440, gain: 0, time: 0.2 },
+  ]);
+  sfx.death = createEffect('square', [
+    { freq: 110, gain: 0, time: 0 },
+    { freq: 165, gain: 0.25, time: 0.125 },
+    { freq: 55, gain: 0.125, time: 0.25 },
+    { freq: 110, gain: 0, time: 0.5 }
+  ]);
+  sfx.goal = createEffect('sawtooth', [
+    { freq: 220*5, gain: 0, time: 0 },
+    { freq: 1320*5, gain: 0.25, time: 0.125 },
+    { freq: 660*5, gain: 0.25, time: 0.4 },
+    { freq: 220*2, gain: 0, time: 0.5 }
+  ]);
 }
 
 const walls = [
@@ -224,7 +279,7 @@ function draw(context) {
     context.fill();
   });
   if (mouthRadius > 3.9 && pacmans.length > 0) {
-    chomp();
+    if (sfx.chomp) sfx.chomp();
   }
 
   // Draw the exit
@@ -321,6 +376,9 @@ function think() {
     // Countdown powerups
     if (pacman.power > 0) {
       pacman.power -= 1;
+      if (pacman.power === 0) {
+        if (sfx.powerdown) sfx.powerdown();
+      }
     }
   });
   if (ghost.intent) {
@@ -359,10 +417,13 @@ function portals() {
 
 function consume() {
   const chompBoxes = pacmans.map(convertSpriteToBox);
+  const hadDots = dots.length > 0;
   dots = dots.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
+  if (hadDots && !dots.length && sfx.death) sfx.death();
   chompBoxes.forEach((box, i) => {
     if (pellets.some(pellet => collides(box, [...pellet, 1, 1]))) {
       pacmans[i].power = 600;
+      if (sfx.powerup) sfx.powerup();
     }
   });
   pellets = pellets.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
@@ -372,10 +433,12 @@ function consume() {
     const ghostBox = convertSpriteToBox(ghost);
     if (collides(chompBox, ghostBox)) {
       if (pacmans[index].power || ghost.eaten) {
+        if (sfx.death && !ghost.eaten) sfx.death();
         ghost.eaten = true;
       } else {
         pacmans.splice(index, 1);
         wallet++;
+        if (sfx.life) sfx.life();
       }
     }
   }
@@ -388,6 +451,7 @@ function exit() {
     if (collides(box, [124, 108, 8, 8])) {
       wallet -= level;
       level += 1;
+      if (sfx.goal) sfx.goal();
       initialize();
     }
   }
@@ -468,6 +532,9 @@ function drawTitle(context) {
     context.fill();    
     souls--;
   });
+  [-11, 0, 13].forEach(x => {
+    if (gy > 128 && ghost.x === (x + 128) && sfx.life) sfx.life();
+  });
   
   const menuPacman = { x: 16, y: 240, vx: 0, vy: 0, static: true };
   context.fillStyle = "#FFF";
@@ -520,7 +587,7 @@ function drawTitle(context) {
     context.fill();
   });
   if (mouthRadius > 3.9 && movingPacman.x > -6 && movingPacman.x < 255) {
-    chomp();
+    if (sfx.chomp) sfx.chomp();
   }
 
   context.fillStyle = "#666";
