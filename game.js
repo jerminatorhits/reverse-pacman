@@ -526,6 +526,9 @@ function drawTitle(context) {
     context.fill();    
     souls--;
   });
+  [-11, 0, 13].forEach(x => {
+    if (gy > 128 && ghost.x === (x + 128) && sfx.life) sfx.life();
+  });
   
   const menuPacman = { x: 16, y: 240, vx: 0, vy: 0, static: true };
   context.fillStyle = "#FFF";
