@@ -20,17 +20,33 @@ function toggleKeyboard() {
   }
 }
 
-let audio;
+function toggleSound() {
+  const soundIcon = document.getElementById('music-icon');
+  if (muted) {
+    muted = false;
+    soundIcon.style.color = 'blue';
+  } else {
+    muted = true;
+    soundIcon.style.color = '#262626';
+  }
+  if (muteGain && audio) {
+    muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
+  }
+}
+
+let audio, muted, muteGain;
 function createEffect(type, shape) {
-  audio = audio || new AudioContext();
   const osc = audio.createOscillator();
   const gain = audio.createGain();
   gain.gain.value = 0;
   osc.connect(gain);
   osc.type = type;
-  gain.connect(audio.destination);
+  gain.connect(muteGain);
   osc.start();
   return () => {
+    if (muted) {
+      return;
+    }
     shape.forEach(part => {
       const time = part.time + audio.currentTime;
       gain.gain.linearRampToValueAtTime(part.gain, time);
@@ -40,6 +56,10 @@ function createEffect(type, shape) {
 }
 const sfx = {};
 function createEffects() {
+  audio = audio || new AudioContext();
+  muteGain = audio.createGain();
+  muteGain.connect(audio.destination);
+  muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
   sfx.chomp = createEffect('triangle', [
     { freq: 110, gain: 0, time: 0 },
     { freq: 220, gain: 0.25, time: 0.125 },
