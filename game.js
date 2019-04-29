@@ -96,7 +96,13 @@ function createEffects() {
     { freq: 165, gain: 0.25, time: 0.125 },
     { freq: 55, gain: 0.125, time: 0.25 },
     { freq: 110, gain: 0, time: 0.5 }
-  ])
+  ]);
+  sfx.goal = createEffect('sawtooth', [
+    { freq: 220*5, gain: 0, time: 0 },
+    { freq: 1320*5, gain: 0.25, time: 0.125 },
+    { freq: 660*5, gain: 0.25, time: 0.4 },
+    { freq: 220*2, gain: 0, time: 0.5 }
+  ]);
 }
 
 const walls = [
@@ -446,6 +452,7 @@ function exit() {
     if (collides(box, [124, 108, 8, 8])) {
       wallet -= level;
       level += 1;
+      if (sfx.goal) sfx.goal();
       initialize();
     }
   }
