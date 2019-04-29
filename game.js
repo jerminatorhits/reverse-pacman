@@ -44,9 +44,6 @@ function createEffect(type, shape) {
   gain.connect(muteGain);
   osc.start();
   return () => {
-    if (muted) {
-      return;
-    }
     shape.forEach(part => {
       const time = part.time + audio.currentTime;
       gain.gain.linearRampToValueAtTime(part.gain, time);
