@@ -32,6 +32,26 @@ function createEffects() {
     { freq: 220, gain: 0.25, time: 0.125 },
     { freq: 110, gain: 0, time: 0.25 }
   ]);
+  sfx.powerup = createEffect('sine', [
+    { freq: 220*2, gain: 0, time: 0 },
+    { freq: 440*2, gain: 0.25, time: 0.125/2 },
+    { freq: 660*2, gain: 0.33, time: 0.25/2 },
+    { freq: 550*2, gain: 0.33, time: 0.375/2 },
+    { freq: 880*2, gain: 0.25, time: 0.5/2 },
+    { freq: 660*2, gain: 0.33, time: 0.625/2 },
+    { freq: 1320*2, gain: 0.33, time: 0.75/2 },
+    { freq: 220*2, gain: 0, time: 1/2 }
+  ]);
+  sfx.powerdown = createEffect('sine', [
+    { freq: 220*2, gain: 0, time: 0 },
+    { freq: 1320*2, gain: 0.25, time: 0.125/2 },
+    { freq: 660*2, gain: 0.33, time: 0.25/2 },
+    { freq: 880*2, gain: 0.33, time: 0.375/2 },
+    { freq: 550*2, gain: 0.25, time: 0.5/2 },
+    { freq: 660*2, gain: 0.33, time: 0.625/2 },
+    { freq: 440*2, gain: 0.33, time: 0.75/2 },
+    { freq: 220*2, gain: 0, time: 1/2 }
+  ]);
 }
 
 const walls = [
@@ -308,6 +328,9 @@ function think() {
     // Countdown powerups
     if (pacman.power > 0) {
       pacman.power -= 1;
+      if (pacman.power === 0) {
+        if (sfx.powerdown) sfx.powerdown();
+      }
     }
   });
   if (ghost.intent) {
@@ -350,6 +373,7 @@ function consume() {
   chompBoxes.forEach((box, i) => {
     if (pellets.some(pellet => collides(box, [...pellet, 1, 1]))) {
       pacmans[i].power = 600;
+      if (sfx.powerup) sfx.powerup();
     }
   });
   pellets = pellets.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
