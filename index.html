@@ -17,17 +17,7 @@
         height: 100vh;
         margin: 0;
       }
-      .arrow-button {
-        width: 33.33%;
-        height: 100%;
-        background-color: gray;
-        border: 1px solid darkblue;
-        border-radius: 5px;
-        outline: none;
-      }
-      button:active {
-        background-color: #272727;
-      }
+
       #game-container {
         align-items: center;
         justify-content: center;
@@ -41,6 +31,20 @@
         height: 100vmin;
         image-rendering: pixelated;
       }
+      #canvas-container {
+        position: relative;
+      }
+      #menu-bar {
+        display: flex;
+        padding: 2vmin;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+      #menu-bar div:not(:first-child) {
+        margin-left: 2vmin;
+      }
+
       #controls-container {
         display: flex;
         height: calc(100vh - 100vmin);
@@ -67,6 +71,24 @@
         width: 33.33%;
         height: 100%;
       }
+      .arrow-button {
+        width: 33.33%;
+        height: 100%;
+        background-color: gray;
+        border: 1px solid darkblue;
+        border-radius: 5px;
+        outline: none;
+      }
+      button:active {
+        background-color: #272727;
+      }
+
+      .fas {
+        font-size: 5vmin;
+      }
+      #gamepad-icon, #music-icon {
+        color: blue;
+      }
 
       @media only screen and (orientation: landscape) {
         #game-container {
@@ -84,14 +106,6 @@
           width: calc(100vw - 100vmin);
           max-height: 50vmin;
         }
-        #control-pad {
-          align-items: center;
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          width: 100%;
-          min-height: 96px;
-        }
       }
 
   </style>
@@ -99,7 +113,17 @@
 
   <body>
     <div id="game-container">
-      <canvas width="256" height="256" onclick="nextGame()" id="game"></canvas>
+      <div id="canvas-container">
+        <canvas width="256" height="256" onclick="nextGame()" id="game"></canvas>
+        <div id="menu-bar">
+          <div id="music-icon">
+            <i class="fas fa-music"></i>
+          </div>
+          <div id="gamepad-icon">
+            <i class="fas fa-gamepad" onclick="toggleKeyboard()"></i>
+          </div>
+        </div>
+      </div>
       <div id="controls-container">
         <div id="control-pad">
           <div class="controls-row">
