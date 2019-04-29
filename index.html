@@ -86,6 +86,9 @@
       .fas {
         font-size: 5vmin;
       }
+      #gamepad-icon, #music-icon {
+        color: blue;
+      }
 
       @media only screen and (orientation: landscape) {
         #game-container {
@@ -113,11 +116,11 @@
       <div id="canvas-container">
         <canvas width="256" height="256" onclick="nextGame()" id="game"></canvas>
         <div id="menu-bar">
-          <div style="color: blue">
+          <div id="music-icon">
             <i class="fas fa-music"></i>
           </div>
-          <div style="color: blue">
-              <i class="fas fa-gamepad"></i>
+          <div id="gamepad-icon">
+            <i class="fas fa-gamepad" onclick="toggleKeyboard()"></i>
           </div>
         </div>
       </div>
