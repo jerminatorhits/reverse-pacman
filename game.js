@@ -53,7 +53,7 @@ function createEffect(type, shape) {
 }
 const sfx = {};
 function createEffects() {
-  // audio = audio || new AudioContext();
+  audio = audio || new AudioContext();
   // muteGain = audio.createGain();
   // muteGain.connect(audio.destination);
   // muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
