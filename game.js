@@ -1,11 +1,51 @@
 console.log('hello from game.js');
 
-document.addEventListener("keydown",keyDownHandler, false);
+document.addEventListener('keydown',keyDownHandler, false);
 
 // initializes fastclick
 document.addEventListener('DOMContentLoaded', function() {
   FastClick.attach(document.body);
 }, false);
+
+function toggleKeyboard() {
+  const controlsContainer = document.getElementById('controls-container');
+  const gamepadIcon = document.getElementById('gamepad-icon');
+  if (controlsContainer.style.display !== 'none') {
+    controlsContainer.style.display = 'none';
+    gamepadIcon.style.color = '#262626';
+  }
+  else {
+    controlsContainer.style.display = 'inline';
+    gamepadIcon.style.color = 'blue';
+  }
+}
+
+let audio;
+function createEffect(type, shape) {
+  audio = audio || new AudioContext();
+  const osc = audio.createOscillator();
+  const gain = audio.createGain();
+  gain.gain.value = 0;
+  osc.connect(gain);
+  osc.type = type;
+  gain.connect(audio.destination);
+  osc.start();
+  return () => {
+    shape.forEach(part => {
+      const time = part.time + audio.currentTime;
+      gain.gain.linearRampToValueAtTime(part.gain, time);
+      osc.frequency.linearRampToValueAtTime(part.freq, time);
+    });
+  };
+}
+let chomp;
+function createEffects() {
+  chomp = createEffect('triangle', [
+    { freq: 110, gain: 0, time: 0 },
+    { freq: 220, gain: 0.25, time: 0.125 },
+    { freq: 110, gain: 0, time: 0.25 }
+  ]);  
+}
 
 const walls = [
   [ 18, 24, 110.5, 2 ],
@@ -75,6 +115,7 @@ const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 
 function initialize() {
+  createEffects();
   counter = 0;
 
   ghost = { x: 128, y: 112, vx: 0, vy: 0 };
@@ -182,6 +223,9 @@ function draw(context) {
     context.lineTo(pacman.x, pacman.y);
     context.fill();
   });
+  if (mouthRadius > 3.9 && pacmans.length > 0) {
+    chomp();
+  }
 
   // Draw the exit
   if (wallet >= level) {
@@ -435,7 +479,6 @@ function drawTitle(context) {
     context.fillStyle = "#BBB";
     context.fillText('a video game', 99, 80);
   }
-
   
   [movingPacman, menuPacman].forEach(pacman => {
     context.fillStyle = pacman.power ? "#F80" : "#FF0";
@@ -476,6 +519,9 @@ function drawTitle(context) {
     context.lineTo(pacman.x, pacman.y);
     context.fill();
   });
+  if (mouthRadius > 3.9 && movingPacman.x > -6 && movingPacman.x < 255) {
+    chomp();
+  }
 
   context.fillStyle = "#666";
   context.beginPath();
