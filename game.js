@@ -546,6 +546,9 @@ function drawTitle(context) {
     context.fillStyle = "#BBB";
     context.fillText('a video game', 99, 80);
   }
+  if (counter > 1100) {
+    context.fillText('© 2019 killscreen & jerminatorhits', 96, 244);
+  }
   
   [movingPacman, menuPacman].forEach(pacman => {
     context.fillStyle = pacman.power ? "#F80" : "#FF0";
