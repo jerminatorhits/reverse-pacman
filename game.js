@@ -8,68 +8,68 @@ document.addEventListener('DOMContentLoaded', function() {
 }, false);
 
 const walls = [
-  [ 18, 24, 109.5, 2 ],
+  [ 18, 24, 110.5, 2 ],
   [ 16, 24, 2, 56 ],
-  [ 16, 80, 42, 2 ],
-  [ 58, 80, 2, 24 ],
-  [ 0, 102, 58, 2 ],
-  [ 0, 122, 58, 2 ],
-  [ 58, 122, 2, 24 ],
+  [ 16, 80, 40, 2 ],
+  [ 56, 80, 2, 26 ],
+  [ 0, 104, 56, 2 ],
+  [ 0, 120, 56, 2 ],
+  [ 56, 120, 2, 24 ],
   [ 18, 144, 40, 2 ],
   [ 16, 144, 2, 80 ],
-  [ 16, 224, 111.5, 2 ],
+  [ 16, 224, 112.5, 2 ],
 
   // edge extrusions
-  [ 125, 26, 6, 20 ],
-  [ 18, 182, 18, 4 ],
+  [ 120, 26, 18, 24 ],
+  [ 18, 176, 16, 10 ],
 
   // inner blocks
-  [ 32, 42, 76, 4 ],
+  [ 32, 40, 74, 10 ],
 
   // Upper T
-  [ 125, 62, 6, 22 ],
-  [ 76, 62, 32, 4 ],
+  [ 120, 64, 9, 18 ],
+  [ 72, 64, 34, 2 ],
 
   // Sideways upper left T
-  [ 76, 66, 4, 38 ],
-
-  [ 32, 62, 28, 4 ],
+  [ 72, 66, 2, 40 ],
+  [ 32, 64, 26, 2 ],
 
   // small inner block
-  [ 96, 80, 12, 4 ],
+  [ 88, 80, 18, 2 ],
 
   // Middle T
-  [ 96, 142, 31.5, 4 ],
-  [ 125, 143, 6, 23 ],
+  [ 88, 144, 40.5, 2 ],
+  [ 128, 145, 1, 17 ],
 
   // Lower T
-  [ 96, 182, 31.5, 4 ],
-  [ 125, 183, 6, 25 ],
+  [ 96, 176, 32.5, 10 ],
+  [ 128, 183, 1, 27 ],
 
   // Lower single walls
-  [ 76, 122, 4, 24 ],
-  [ 80, 162, 28, 4 ],
+  [ 72, 120, 2, 26 ],
+  [ 32, 160, 26, 2 ],
 
   // rotated L parts near the bottom
-  [ 76, 162, 4, 24 ],
-  [ 36, 162, 24, 4 ],
+  [ 72, 160, 10, 26 ],
+  [ 82, 160, 32, 2 ],
 
   // upside down kinda like T shapes
-  [ 54, 182, 6, 20 ],
-  [ 36, 202, 72, 6 ],
+  [ 48, 176, 10, 26 ],
+  [ 32, 200, 82, 10 ],
 
   // ghost box (boo!)
-  [ 96, 104, 12, 18 ]
+  [ 88, 96, 18, 34 ],
 ];
 
 walls.slice().forEach(wall => {
-  walls.push([ 256 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
+  walls.push([ 258 - wall[0] - wall[2], wall[1], wall[2], wall[3] ]);
 });
+walls.forEach(wall => (wall[0]--));
 
 let dots, pellets, pacmans, ghost;
 
 let wallet = 0;
-let level = 1;
+let level = 0;
 
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
@@ -81,12 +81,12 @@ function initialize() {
 
   dots = [];
   const noDotZones = [
-    [ 16, 80, 44, 64 ],
-    [ 196, 80, 44, 64 ],
-    [ 80, 80, 96, 64 ]
+    [ 16, 80, 42, 64 ],
+    [ 204, 80, 42, 64 ],
+    [ 76, 80, 104, 64 ]
   ];
-  for (let x = 19; x < 230; x += 2) {
-    for (let y = 27; y < 220; y += 2) {
+  for (let x = 18; x < 230; x += 8) {
+    for (let y = 27; y < 220; y += 8) {
       const box = [ x, y, 12, 12 ];
       if (!noDotZones.some(zone => collides(box, zone))) {
         if (!walls.some(otherBox => collides(box, otherBox))) {
@@ -247,8 +247,8 @@ function collisions() {
   // Stop at walls
   [ ...pacmans, ghost ].forEach(entity => {
     const box = convertSpriteToBox(entity);
-    box[0] += entity.vx * 3;
-    box[1] += entity.vy * 3;
+    box[0] += entity.vx * 2;
+    box[1] += entity.vy * 2;
     if (walls.some(wall => collides(wall, box))) {
       entity.vx = 0;
       entity.vy = 0;
@@ -281,8 +281,8 @@ function think() {
   });
   if (ghost.intent) {
     const box = convertSpriteToBox(ghost);
-    box[0] += ghost.intent.vx * 6;
-    box[1] += ghost.intent.vy * 6;
+    box[0] += ghost.intent.vx * 3;
+    box[1] += ghost.intent.vy * 3;
     if (!walls.some(wall => collides(wall, box))) {
       ghost.vx = ghost.intent.vx;
       ghost.vy = ghost.intent.vy;
@@ -292,9 +292,14 @@ function think() {
 }
 
 function spawn() {
-  if (counter % 600 === 0) {
-    pacmans.push({ x: 0, y: 114, vx: -1, vy: 0, power: 600 });
-    pacmans.push({ x: 0, y: 114, vx: 1, vy: 0, power: 600 });
+  if (counter % 600 === 0 && pacmans.length < 256) {
+    if (Math.random() > 0.5) {
+      const vx = Math.random() > 0.5 ? -1 : 1;
+      pacmans.push({ x: 0, y: 114, vx, vy: 0, power: 600 });
+      pacmans.push({ x: 0, y: 114, vx: -vx, vy: 0, power: Math.random() > 0.5 ? 600 : 0 });
+    } else {
+      pacmans.push({ x: 0, y: 114, vx: Math.random() > 0.5 ? -1 : 1, vy: 0, power: Math.random() > 0.5 ? 600 : 0 });
+    }
   }
 }
 
@@ -318,7 +323,8 @@ function consume() {
   });
   pellets = pellets.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
   // eats pacmen on ghost collision
-  chompBoxes.forEach((chompBox, index) => {
+  for (let index = chompBoxes.length - 1; index >= 0; index -= 1) {
+    const chompBox = chompBoxes[index];
     const ghostBox = convertSpriteToBox(ghost);
     if (collides(chompBox, ghostBox)) {
       if (pacmans[index].power || ghost.eaten) {
@@ -328,7 +334,7 @@ function consume() {
         wallet++;
       }
     }
-  });
+  }
   ghost.eaten = ghost.eaten || !dots.length;
 }
 
@@ -356,19 +362,166 @@ function run() {
   //draw(context);
 }
 
+
+function runTitle() {
+  counter += 1;
+}
+
+function drawTitle(context) {
+  // Clear the screen
+  context.fillStyle = "#000";
+  context.fillRect(0, 0, 256, 256);
+
+  const gx = counter < 380 ? (320 - counter) : (counter - 380 - 120);
+  const gy = counter < 380 ? 112 : 140;
+  const ghost = { x: gx, y: gy + Math.sin(counter / 10) * 2 };
+  const px = counter < 380 ? gx + 32 : gx - 32;
+  const py = gy;
+  const movingPacman = { x: counter < 380 ? px : Math.min(px, 96), y: py, vx: Math.sign(gx - px), vy: 0, power: true };
+  const mouthRadius = (counter < 380 || px < 96) ? ((Math.sin(Date.now() / 100) + 1) / 2) * 4 : 4; // chomp chomp
+  const ex = (gx > 160) ? 1 : (gx < 100) ? -1 : 0;
+  const ey = gy < 128 ? -1 : 0;
+  let souls = 3;
+  
+  if (gy < 128 || gx < 128) {
+    context.fillStyle = "#FF0";
+    context.beginPath();
+    context.arc(128, 140, 6, 0, Math.PI * 2);
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(128 - 2, 140 - 1, 2, 0, Math.PI * 2);
+    context.fill();
+    context.beginPath();
+    context.arc(128 + 2, 140 - 1, 2, 0, Math.PI * 2);
+    context.fill();
+    context.fillStyle = "#F0F";
+    context.beginPath();
+    context.arc(128 - 2 + ex, 140 - 1 + ey, 1, 0, Math.PI * 2);
+    context.fill();
+    context.beginPath();
+    context.arc(128 + 2 + ex, 140 - 1 + ey, 1, 0, Math.PI * 2);
+    context.fill();
+    context.beginPath();
+    context.arc(128, 142, 2, 0, Math.PI);
+    context.fill();
+    context.beginPath();
+    context.arc(128, 134, 1.5, 0, Math.PI * 2);
+    context.fill();
+    context.beginPath();
+    context.moveTo(124, 132);
+    context.lineTo(132, 136);
+    context.lineTo(132, 132);
+    context.lineTo(124, 136);
+    context.fill();
+    souls--;
+  }
+  [-11, 13].filter(cx => gy < 128 || gx < 128 + cx).forEach((cx, i) => {
+    const wiggle = Math.floor((counter / (i ? 60 : 44))) % 3 > 1 ? Math.abs(Math.sin(counter / (i ? 25 : 18))) : 0;
+    context.fillStyle = "#FF0";
+    context.beginPath();
+    context.arc(128 + cx, 143 - wiggle, 3, 0, Math.PI * 2);
+    context.fill();    
+    souls--;
+  });
+  
+  const menuPacman = { x: 16, y: 240, vx: 0, vy: 0, static: true };
+  context.fillStyle = "#FFF";
+  context.fillText(`${souls}`, 26, 244);
+  if (counter > 900) {
+    context.fillText('SOUL TOLL', 102, 64);
+  }
+  if (counter > 1000) {
+    context.fillStyle = "#BBB";
+    context.fillText('a video game', 99, 80);
+  }
+
+  
+  [movingPacman, menuPacman].forEach(pacman => {
+    context.fillStyle = pacman.power ? "#F80" : "#FF0";
+    context.beginPath();
+    context.arc(pacman.x, pacman.y, 6, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#000";
+    context.beginPath();
+    if (pacman.static) {
+      context.arc(pacman.x, pacman.y, 4, 0, Math.PI);
+    }
+    else {
+      if (pacman.power) {
+        context.arc(pacman.x + pacman.vx, pacman.y + mouthRadius, mouthRadius, Math.PI, 0);
+      } else {
+        context.arc(pacman.x + pacman.vx, pacman.y, mouthRadius, 0, Math.PI);
+      }
+    }
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(pacman.x + 2, pacman.y - 2, 2, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = "#FFF";
+    context.beginPath();
+    context.arc(pacman.x - 2, pacman.y - 2, 2, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.fillStyle = pacman.power ? "#F00" : "#0F0";
+    context.beginPath();
+    context.arc(pacman.x - 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+    context.beginPath();
+    context.arc(pacman.x + 2 + pacman.vx, pacman.y - 2 + pacman.vy, 1, 0, Math.PI * 2);
+    context.lineTo(pacman.x, pacman.y);
+    context.fill();
+  });
+
+  context.fillStyle = "#666";
+  context.beginPath();
+  context.arc(ghost.x, ghost.y, 6, Math.PI, Math.PI * 2);
+  context.lineTo(ghost.x + 6, ghost.y + 6);
+  context.lineTo(ghost.x + 4, ghost.y + 4);
+  context.lineTo(ghost.x + 2, ghost.y + 6);
+  context.lineTo(ghost.x , ghost.y + 4);
+  context.lineTo(ghost.x - 2, ghost.y + 6);
+  context.lineTo(ghost.x - 4, ghost.y + 4);
+  context.lineTo(ghost.x - 6, ghost.y + 6);
+  context.fill();   
+  context.fillStyle = "#BBB";
+  context.beginPath();
+  context.arc(ghost.x, ghost.y, 4, Math.PI, Math.PI * 2);
+  context.lineTo(ghost.x + 3, ghost.y + 2);
+  context.lineTo(ghost.x + 2, ghost.y + 4);
+  context.lineTo(ghost.x , ghost.y + 2);
+  context.lineTo(ghost.x - 2, ghost.y + 4);
+  context.lineTo(ghost.x - 3, ghost.y + 2);
+  context.fill();
+  context.fillStyle = "#000";
+  context.beginPath();
+  context.arc(ghost.x + 2, ghost.y - 1, 1, 0, Math.PI * 2);
+  context.lineTo(ghost.x, ghost.y);
+  context.fill();
+  context.fillStyle = "#000";
+  context.beginPath();
+  context.arc(ghost.x - 2, ghost.y - 1, 1, 0, Math.PI * 2);
+  context.lineTo(ghost.x, ghost.y);
+  context.fill();
+}
+
 let lastTime;
 function nextLoop() {
   requestAnimationFrame(timestamp => {
     if (!lastTime) lastTime = timestamp;
     const delta = timestamp - lastTime;
-    const frames = Math.floor(120 * delta / 1000);
+    const frames = Math.min(Math.floor(120 * delta / 1000), 60);
     if (frames > 0) {
       lastTime = timestamp;
     }
     for (let i = 0; i < frames; i += 1) {
-      run();
+      (level > 0 ? run : runTitle)();
     }
-    draw(context);
+    (level > 0 ? draw : drawTitle)(context);
     nextLoop();
   });
 }
@@ -377,6 +530,8 @@ initialize();
 nextLoop();
 
 const mapMoveFromKeyCode = {
+  13: nextGame,
+  32: nextGame,
   37: moveLeft,
   38: moveUp,
   39: moveRight,
@@ -388,9 +543,11 @@ function keyDownHandler(event) {
     mapMoveFromKeyCode[event.keyCode]();
     event.preventDefault();
   }
-  else if (ghost.eaten && [13, 32].includes(event.keyCode)) {
-    event.preventDefault();
-    level = 1;
+}
+
+function nextGame() {
+  if (ghost.eaten || level === 0) {
+    level = level === 0 ? 1 : 0;
     wallet = 0;
     initialize();
   }
