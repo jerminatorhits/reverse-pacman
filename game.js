@@ -25,13 +25,13 @@ function createEffect(type, shape) {
     });
   };
 }
-let chomp;
+const sfx = {};
 function createEffects() {
-  chomp = createEffect('triangle', [
+  sfx.chomp = createEffect('triangle', [
     { freq: 110, gain: 0, time: 0 },
     { freq: 220, gain: 0.25, time: 0.125 },
     { freq: 110, gain: 0, time: 0.25 }
-  ]);  
+  ]);
 }
 
 const walls = [
@@ -211,7 +211,7 @@ function draw(context) {
     context.fill();
   });
   if (mouthRadius > 3.9 && pacmans.length > 0) {
-    chomp();
+    if (sfx.chomp) sfx.chomp();
   }
 
   // Draw the exit
@@ -507,7 +507,7 @@ function drawTitle(context) {
     context.fill();
   });
   if (mouthRadius > 3.9 && movingPacman.x > -6 && movingPacman.x < 255) {
-    chomp();
+    if (sfx.chomp) sfx.chomp();
   }
 
   context.fillStyle = "#666";
