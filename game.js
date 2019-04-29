@@ -420,7 +420,9 @@ function portals() {
 
 function consume() {
   const chompBoxes = pacmans.map(convertSpriteToBox);
+  const hadDots = dots.length > 0;
   dots = dots.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
+  if (hadDots && !dots.length && sfx.death) sfx.death();
   chompBoxes.forEach((box, i) => {
     if (pellets.some(pellet => collides(box, [...pellet, 1, 1]))) {
       pacmans[i].power = 600;
