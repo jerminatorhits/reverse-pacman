@@ -87,8 +87,8 @@ function createEffects() {
   ]);
   sfx.life = createEffect('sawtooth', [
     { freq: 220, gain: 0, time: 0 },
-    { freq: 1320, gain: 0.25, time: 0.125 },
-    { freq: 1320 * 3, gain: 0.25, time: 0.175 },
+    { freq: 1320, gain: 0.2, time: 0.125 },
+    { freq: 1320 * 3, gain: 0.2, time: 0.175 },
     { freq: 440, gain: 0, time: 0.2 },
   ]);
   sfx.death = createEffect('square', [
