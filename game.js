@@ -85,6 +85,18 @@ function createEffects() {
     { freq: 440*2, gain: 0.33, time: 0.75/2 },
     { freq: 220*2, gain: 0, time: 1/2 }
   ]);
+  sfx.life = createEffect('sawtooth', [
+    { freq: 220, gain: 0, time: 0 },
+    { freq: 1320, gain: 0.25, time: 0.125 },
+    { freq: 1320 * 3, gain: 0.25, time: 0.175 },
+    { freq: 440, gain: 0, time: 0.2 },
+  ]);
+  sfx.death = createEffect('square', [
+    { freq: 110, gain: 0, time: 0 },
+    { freq: 165, gain: 0.25, time: 0.125 },
+    { freq: 55, gain: 0.125, time: 0.25 },
+    { freq: 110, gain: 0, time: 0.5 }
+  ])
 }
 
 const walls = [
@@ -416,10 +428,12 @@ function consume() {
     const ghostBox = convertSpriteToBox(ghost);
     if (collides(chompBox, ghostBox)) {
       if (pacmans[index].power || ghost.eaten) {
+        if (sfx.death && !ghost.eaten) sfx.death();
         ghost.eaten = true;
       } else {
         pacmans.splice(index, 1);
         wallet++;
+        if (sfx.life) sfx.life();
       }
     }
   }
