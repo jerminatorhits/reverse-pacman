@@ -29,9 +29,9 @@ function toggleSound() {
     muted = true;
     soundIcon.style.color = '#262626';
   }
-  if (muteGain && audio) {
-    muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
-  }
+  // if (muteGain && audio) {
+  //   muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
+  // }
 }
 
 let audio, muted, muteGain;
@@ -41,7 +41,7 @@ function createEffect(type, shape) {
   gain.gain.value = 0;
   osc.connect(gain);
   osc.type = type;
-  gain.connect(muteGain);
+  // gain.connect(muteGain);
   osc.start();
   return () => {
     shape.forEach(part => {
@@ -51,7 +51,7 @@ function createEffect(type, shape) {
     });
   };
 }
-const sfx = {};
+// const sfx = {};
 function createEffects() {
   audio = audio || new AudioContext();
   // muteGain = audio.createGain();
@@ -279,7 +279,7 @@ function draw(context) {
     context.fill();
   });
   if (mouthRadius > 3.9 && pacmans.length > 0) {
-    if (sfx.chomp) sfx.chomp();
+    // if (sfx.chomp) sfx.chomp();
   }
 
   // Draw the exit
@@ -377,7 +377,7 @@ function think() {
     if (pacman.power > 0) {
       pacman.power -= 1;
       if (pacman.power === 0) {
-        if (sfx.powerdown) sfx.powerdown();
+        // // if (sfx.powerdown) sfx.powerdown();
       }
     }
   });
@@ -419,11 +419,11 @@ function consume() {
   const chompBoxes = pacmans.map(convertSpriteToBox);
   const hadDots = dots.length > 0;
   dots = dots.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
-  if (hadDots && !dots.length && sfx.death) sfx.death();
+  // // if (hadDots && !dots.length && sfx.death) sfx.death();
   chompBoxes.forEach((box, i) => {
     if (pellets.some(pellet => collides(box, [...pellet, 1, 1]))) {
       pacmans[i].power = 600;
-      if (sfx.powerup) sfx.powerup();
+      // // if (sfx.powerup) sfx.powerup();
     }
   });
   pellets = pellets.filter(dot => !chompBoxes.some(box => collides(box, [...dot, 1, 1 ])));
@@ -433,12 +433,12 @@ function consume() {
     const ghostBox = convertSpriteToBox(ghost);
     if (collides(chompBox, ghostBox)) {
       if (pacmans[index].power || ghost.eaten) {
-        if (sfx.death && !ghost.eaten) sfx.death();
+        // // if (sfx.death && !ghost.eaten) sfx.death();
         ghost.eaten = true;
       } else {
         pacmans.splice(index, 1);
         wallet++;
-        if (sfx.life) sfx.life();
+        // // if (sfx.life) sfx.life();
       }
     }
   }
@@ -451,7 +451,7 @@ function exit() {
     if (collides(box, [124, 108, 8, 8])) {
       wallet -= level;
       level += 1;
-      if (sfx.goal) sfx.goal();
+      // // if (sfx.goal) sfx.goal();
       initialize();
     }
   }
@@ -533,7 +533,7 @@ function drawTitle(context) {
     souls--;
   });
   [-11, 0, 13].forEach(x => {
-    if (gy > 128 && ghost.x === (x + 128) && sfx.life) sfx.life();
+    // // if (gy > 128 && ghost.x === (x + 128) && sfx.life) sfx.life();
   });
   
   const menuPacman = { x: 16, y: 240, vx: 0, vy: 0, static: true };
@@ -587,7 +587,7 @@ function drawTitle(context) {
     context.fill();
   });
   if (mouthRadius > 3.9 && movingPacman.x > -6 && movingPacman.x < 255) {
-    if (sfx.chomp) sfx.chomp();
+    // // if (sfx.chomp) sfx.chomp();
   }
 
   context.fillStyle = "#666";
