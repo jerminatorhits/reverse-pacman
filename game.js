@@ -53,53 +53,53 @@ function createEffect(type, shape) {
 }
 const sfx = {};
 function createEffects() {
-  // audio = audio || new AudioContext();
-  // muteGain = audio.createGain();
-  // muteGain.connect(audio.destination);
-  // muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
-  // sfx.chomp = createEffect('triangle', [
-  //   { freq: 110, gain: 0, time: 0 },
-  //   { freq: 220, gain: 0.25, time: 0.125 },
-  //   { freq: 110, gain: 0, time: 0.25 }
-  // ]);
-  // sfx.powerup = createEffect('sine', [
-  //   { freq: 220*2, gain: 0, time: 0 },
-  //   { freq: 440*2, gain: 0.25, time: 0.125/2 },
-  //   { freq: 660*2, gain: 0.33, time: 0.25/2 },
-  //   { freq: 550*2, gain: 0.33, time: 0.375/2 },
-  //   { freq: 880*2, gain: 0.25, time: 0.5/2 },
-  //   { freq: 660*2, gain: 0.33, time: 0.625/2 },
-  //   { freq: 1320*2, gain: 0.33, time: 0.75/2 },
-  //   { freq: 220*2, gain: 0, time: 1/2 }
-  // ]);
-  // sfx.powerdown = createEffect('sine', [
-  //   { freq: 220*2, gain: 0, time: 0 },
-  //   { freq: 1320*2, gain: 0.25, time: 0.125/2 },
-  //   { freq: 660*2, gain: 0.33, time: 0.25/2 },
-  //   { freq: 880*2, gain: 0.33, time: 0.375/2 },
-  //   { freq: 550*2, gain: 0.25, time: 0.5/2 },
-  //   { freq: 660*2, gain: 0.33, time: 0.625/2 },
-  //   { freq: 440*2, gain: 0.33, time: 0.75/2 },
-  //   { freq: 220*2, gain: 0, time: 1/2 }
-  // ]);
-  // sfx.life = createEffect('sawtooth', [
-  //   { freq: 220, gain: 0, time: 0 },
-  //   { freq: 1320, gain: 0.2, time: 0.125 },
-  //   { freq: 1320 * 3, gain: 0.2, time: 0.175 },
-  //   { freq: 440, gain: 0, time: 0.2 },
-  // ]);
-  // sfx.death = createEffect('square', [
-  //   { freq: 110, gain: 0, time: 0 },
-  //   { freq: 165, gain: 0.25, time: 0.125 },
-  //   { freq: 55, gain: 0.125, time: 0.25 },
-  //   { freq: 110, gain: 0, time: 0.5 }
-  // ]);
-  // sfx.goal = createEffect('sawtooth', [
-  //   { freq: 220*5, gain: 0, time: 0 },
-  //   { freq: 1320*5, gain: 0.25, time: 0.125 },
-  //   { freq: 660*5, gain: 0.25, time: 0.4 },
-  //   { freq: 220*2, gain: 0, time: 0.5 }
-  // ]);
+  audio = audio || new AudioContext();
+  muteGain = audio.createGain();
+  muteGain.connect(audio.destination);
+  muteGain.gain.setValueAtTime(muted ? 0 : 1, audio.currentTime);
+  sfx.chomp = createEffect('triangle', [
+    { freq: 110, gain: 0, time: 0 },
+    { freq: 220, gain: 0.25, time: 0.125 },
+    { freq: 110, gain: 0, time: 0.25 }
+  ]);
+  sfx.powerup = createEffect('sine', [
+    { freq: 220*2, gain: 0, time: 0 },
+    { freq: 440*2, gain: 0.25, time: 0.125/2 },
+    { freq: 660*2, gain: 0.33, time: 0.25/2 },
+    { freq: 550*2, gain: 0.33, time: 0.375/2 },
+    { freq: 880*2, gain: 0.25, time: 0.5/2 },
+    { freq: 660*2, gain: 0.33, time: 0.625/2 },
+    { freq: 1320*2, gain: 0.33, time: 0.75/2 },
+    { freq: 220*2, gain: 0, time: 1/2 }
+  ]);
+  sfx.powerdown = createEffect('sine', [
+    { freq: 220*2, gain: 0, time: 0 },
+    { freq: 1320*2, gain: 0.25, time: 0.125/2 },
+    { freq: 660*2, gain: 0.33, time: 0.25/2 },
+    { freq: 880*2, gain: 0.33, time: 0.375/2 },
+    { freq: 550*2, gain: 0.25, time: 0.5/2 },
+    { freq: 660*2, gain: 0.33, time: 0.625/2 },
+    { freq: 440*2, gain: 0.33, time: 0.75/2 },
+    { freq: 220*2, gain: 0, time: 1/2 }
+  ]);
+  sfx.life = createEffect('sawtooth', [
+    { freq: 220, gain: 0, time: 0 },
+    { freq: 1320, gain: 0.2, time: 0.125 },
+    { freq: 1320 * 3, gain: 0.2, time: 0.175 },
+    { freq: 440, gain: 0, time: 0.2 },
+  ]);
+  sfx.death = createEffect('square', [
+    { freq: 110, gain: 0, time: 0 },
+    { freq: 165, gain: 0.25, time: 0.125 },
+    { freq: 55, gain: 0.125, time: 0.25 },
+    { freq: 110, gain: 0, time: 0.5 }
+  ]);
+  sfx.goal = createEffect('sawtooth', [
+    { freq: 220*5, gain: 0, time: 0 },
+    { freq: 1320*5, gain: 0.25, time: 0.125 },
+    { freq: 660*5, gain: 0.25, time: 0.4 },
+    { freq: 220*2, gain: 0, time: 0.5 }
+  ]);
 }
 
 const walls = [
